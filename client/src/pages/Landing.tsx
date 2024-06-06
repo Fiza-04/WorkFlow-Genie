@@ -1,7 +1,30 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 const Landing = () => {
+  const navigate = useNavigate();
+
+  const Images = [
+    { src: "/assets/images/landing_img.png", className: "landing_img" },
+    {
+      src: "/assets/images/pie_chart.png",
+      className: "pie_chart_img absolute",
+    },
+    { src: "/assets/images/clock.png", className: "clock_img absolute" },
+    { src: "/assets/images/robot_2.png", className: "robot_2_img absolute" },
+    { src: "/assets/images/robot_1.png", className: "robot_1_img absolute" },
+  ];
+  useEffect(() => {
+    const token = Cookies.get("token");
+
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
+
   return (
     <div className="relative flex flex-col h-screen bg-gradient nunito-style">
       <div className="flex flex-col justify-between">
@@ -24,31 +47,9 @@ const Landing = () => {
 
         {/* Centered main image */}
         <div className="flex relative justify-end">
-          <img
-            src="/assets/images/landing_img.png"
-            alt="image"
-            className="landing_img"
-          />
-          <img
-            src="/assets/images/pie_chart.png"
-            alt="image"
-            className="pie_chart_img absolute"
-          />
-          <img
-            src="/assets/images/clock.png"
-            alt="image"
-            className="clock_img absolute"
-          />
-          <img
-            src="/assets/images/robot_2.png"
-            alt="image"
-            className="robot_2_img absolute"
-          />
-          <img
-            src="/assets/images/robot_1.png"
-            alt="image"
-            className="robot_1_img absolute"
-          />
+          {Images.map((image) => (
+            <img src={image.src} alt="image" className={image.className} />
+          ))}
         </div>
 
         <div className="absolute m-6 top-[30%] left-[5%] text-white">

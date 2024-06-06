@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
@@ -32,6 +32,14 @@ const Login = () => {
       alert("Incorrect Email or Password!");
     }
   }
+
+  useEffect(() => {
+    const token = Cookies.get("token");
+
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   return (
     <div>

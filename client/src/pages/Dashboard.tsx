@@ -27,7 +27,35 @@ const Dashboard = () => {
     }
   }, [navigate]);
 
-  return <div>Dashboard</div>;
+  async function handleLogout() {
+    try {
+      const response = await fetch("http://localhost:3000/api/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.status === "ok") {
+        Cookies.remove("token");
+        navigate("/login");
+      } else {
+        console.error("Failed to log out:", data.message);
+      }
+    } catch (error) {
+      console.error("Failed to log out:", error);
+    }
+  }
+
+  return (
+    <div>
+      <a href="#" onClick={handleLogout}>
+        Logout
+      </a>
+    </div>
+  );
 };
 
 export default Dashboard;

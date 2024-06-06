@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Signup = () => {
   const [firstName, setFirstName] = useState("");
@@ -28,19 +29,16 @@ const Signup = () => {
 
     const data = await response.json();
 
-    if (data.status === "ok") {
-      navigate("/dashboard");
-    }
-
     console.log(data);
 
     if (data.user) {
+      Cookies.set("token", data.token, { expires: 1 });
       localStorage.setItem("token", data.user);
       alert("Login Successful");
-      window.location.href = "/dashboard";
+      navigate("/dashboard");
     } else {
       alert("Incorrect Email or Password!");
-      window.location.href = "/signup";
+      navigate("/signup");
     }
   }
 

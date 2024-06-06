@@ -33,7 +33,7 @@ const loginUser = async (req, res) => {
     });
 
     if (!user) {
-      return { status: "error", error: "Nosuch User Found!" };
+      return { status: "error", error: "No such User Found!" };
     }
     const isPasswordValid = await bcrypt.compare(
       req.body.password,
@@ -69,33 +69,16 @@ const loginUser = async (req, res) => {
   }
 };
 
-// const tokenHandling = async (req, res) => {
-//   const token = req.headers["x-access-token"];
+const logoutUser = async (req, res) => {
+  try {
+    res.cookie("token", "", {
+      httpOnly: true,
+      expires: new Date(0), // Set to expire immediately
+    });
+    res.status(200).json({ status: "ok", message: "Logout Successful" });
+  } catch (error) {
+    return res.status(400).json({ status: false, message: error.message });
+  }
+};
 
-//   try {
-//     const decoded = jwt.verify(token, process.env.JWT_KEY);
-//     const email = decoded.email;
-//     const user = await User.findOne({ email: email });
-
-//     return res.json({ status: "ok", token: user.token });
-//   } catch (error) {
-//     console.log(error);
-//     res.json({ status: "error", error: "Invalid token" });
-//   }
-// };
-
-// const createToken = async (req, res) => {
-//   const token = req.headers["x-access-token"];
-
-//   try {
-//     const decoded = jwt.verify(token, process.env.JWT_KEY);
-//     const email = decoded.email;
-//     await User.updateOne({ email: email }, { $set: { token: req.body.token } });
-
-//     return res.json({ status: "ok" });
-//   } catch (error) {
-//     console.log(error);
-//     res.json({ status: "error", error: "Invalid token" });
-//   }
-// };
-module.exports = { registerUser, loginUser };
+module.exports = { registerUser, loginUser, logoutUser };

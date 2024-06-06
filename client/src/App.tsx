@@ -1,7 +1,8 @@
-import { Route, Routes } from "react-router-dom";
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 import { Landing, Signup, Login, Dashboard } from "./pages/index.tsx";
 
-export default function App() {
+const App: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
@@ -10,4 +11,6 @@ export default function App() {
       <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
   );
-}
+};
+
+export default App;

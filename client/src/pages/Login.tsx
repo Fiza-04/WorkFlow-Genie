@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   async function loginUser(event: React.FormEvent) {
     event.preventDefault();
@@ -25,7 +27,7 @@ const Login = () => {
     if (data.user && data.status === "ok") {
       Cookies.set("token", data.user, { expires: 1 });
       alert("Login Successful");
-      window.location.href = "/dashboard";
+      navigate("/dashboard");
     } else {
       alert("Incorrect Email or Password!");
     }

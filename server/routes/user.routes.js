@@ -2,14 +2,13 @@ const express = require("express");
 const {
   registerUser,
   loginUser,
-  // tokenHandling,
-  // createToken,
+  logoutUser,
 } = require("../controllers/user.controllers.js");
 
 const router = express.Router();
 
-router.post("/login", loginUser);
-
 router.post("/register", registerUser);
+router.post("/login", loginUser);
+router.post("/logout", logoutUser);
 
 module.exports = router;

@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const { dbConnection } = require("./utils/index.js");
 const userRoutes = require("./routes/user.routes.js");
+const projectRoutes = require("./routes/project.routes.js");
 // const taskRoutes = require("./routes/task.routes.js");
 
 dbConnection();
@@ -18,6 +19,7 @@ app.use(cookieParser());
 app.use(cors());
 app.use(morgan("dev"));
 app.use("/api", userRoutes);
+app.use("/api", projectRoutes);
 // app.use("/api", taskRoutes);
 
 app.listen(PORT, () => console.log(`Server listening on port -> ${PORT}`));

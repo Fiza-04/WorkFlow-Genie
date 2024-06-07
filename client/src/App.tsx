@@ -12,7 +12,7 @@ const App: React.FC = () => {
     const location = useLocation();
 
     return token ? (
-      <div className="flex bg-zinc-950">
+      <div className="flex">
         <Sidebar />
         <Topbar />
         <Outlet />

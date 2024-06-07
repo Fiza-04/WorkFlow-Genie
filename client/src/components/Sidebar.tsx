@@ -41,8 +41,9 @@ const Sidebar = () => {
           "Content-Type": "application/json",
         },
       });
-
+      console.log("response => ", response);
       const data = await response.json();
+      console.log("data => ", data);
 
       if (data.status === "ok") {
         Cookies.remove("token");
@@ -54,6 +55,7 @@ const Sidebar = () => {
       console.error("Failed to log out:", error);
     }
   }
+
   return (
     <div>
       <div

@@ -2,8 +2,6 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-import Sidebar from "../components/Sidebar";
-import Topbar from "../components/Topbar";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -30,7 +28,7 @@ const Dashboard = () => {
   }, [navigate]);
 
   return (
-    <div className="flex bg-zinc-950">
+    <div className="flex">
       {/* <Sidebar />
       <Topbar />
       <h1 className="text-4xl">Home</h1> */}

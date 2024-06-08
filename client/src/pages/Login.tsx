@@ -22,8 +22,6 @@ const Login = () => {
 
     const data = await response.json();
 
-    console.log(data);
-
     if (data.user && data.status === "ok") {
       Cookies.set("token", data.user, { expires: 1 });
       alert("Login Successful");

@@ -29,16 +29,12 @@ const Signup = () => {
 
     const data = await response.json();
 
-    console.log(data);
-
-    if (data.user) {
-      Cookies.set("token", data.token, { expires: 1 });
-      localStorage.setItem("token", data.user);
-      alert("Login Successful");
+    if (data.user && data.status === "ok") {
+      Cookies.set("token", data.user, { expires: 1 });
+      alert("Signup Successful");
       navigate("/dashboard");
     } else {
       alert("Incorrect Email or Password!");
-      navigate("/signup");
     }
   }
 

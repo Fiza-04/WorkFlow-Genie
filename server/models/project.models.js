@@ -5,7 +5,7 @@ const ProjectSchema = new Schema(
   {
     title: { type: String, required: true },
     eod: { type: Date, required: true },
-    desc: { type: String, default: "" }, // Adding default empty string if not required
+    desc: { type: String, default: "" },
     priority: {
       type: String,
       default: "normal",
@@ -18,10 +18,14 @@ const ProjectSchema = new Schema(
       enum: ["pending", "in-progress", "completed"],
       required: true,
     },
-    team: [{ type: Schema.Types.ObjectId, ref: "UserData", default: [] }],
+    team: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     isTrashed: { type: Boolean, default: false, required: true },
-    createdBy: { type: Schema.Types.ObjectId, ref: "UserData", required: true }, // Assuming a single creator
-    tasks: [{ type: Schema.Types.ObjectId, ref: "TaskData", default: [] }],
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    tasks: [{ type: Schema.Types.ObjectId, ref: "Task", default: [] }],
   },
   {
     timestamps: true,

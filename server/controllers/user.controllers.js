@@ -6,7 +6,7 @@ const User = require("../models/user.models.js");
 const registerUser = async (req, res) => {
   try {
     const newPassword = await bcrypt.hash(req.body.password, 10);
-    await User.create({
+    const user = await User.create({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       username: req.body.username,
@@ -14,9 +14,22 @@ const registerUser = async (req, res) => {
       password: newPassword,
     });
 
+    const token = jwt.sign(
+      {
+        username: user.username,
+        email: user.email,
+      },
+      process.env.JWT_KEY,
+      { expiresIn: "1h" } // Token expiry time
+    );
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
+
     res.json({
-      status: true,
-      user: true,
+      status: "ok",
+      user: token,
       message: "User created Successfully",
     });
   } catch (error) {

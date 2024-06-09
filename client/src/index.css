@@ -57,6 +57,10 @@
   .subtext {
     @apply pb-2 text-slate-300;
   }
+
+  .topbar-icons {
+    @apply cursor-pointer bg-neutral-900 p-4 rounded-[17px] hover:bg-neutral-800 icon-shadow;
+  }
 }
 
 /* text animation */
@@ -181,6 +185,19 @@
   left: calc(100% - 105px);
   box-shadow: 0 0 10px rgba(143, 141, 222, 0.7);
   transition: 2s ease-in-out;
+}
+
+.right-shadow {
+  box-shadow: 0px 0 10px 0px rgba(0, 0, 0, 3);
+}
+
+.icon-shadow {
+  background: #171717;
+  box-shadow: inset -4px -4px 9px #0e0e0e, inset 4px 4px 9px #202020;
+}
+
+.hover-shadow:hover {
+  box-shadow: 0.7px 0.7px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 @media (max-width: 768px) {

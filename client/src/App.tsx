@@ -1,9 +1,17 @@
 import React from "react";
 import Cookies from "js-cookie";
 import { Routes, Route, useLocation, Navigate, Outlet } from "react-router-dom";
-import { Landing, Signup, Login, Dashboard } from "./pages/index.tsx";
+import {
+  Landing,
+  Signup,
+  Login,
+  Dashboard,
+  Projects,
+  Profile,
+  Trash,
+  Settings,
+} from "./pages/index.tsx";
 import { Sidebar, Topbar } from "./components/index.tsx";
-import Projects from "./pages/Projects.tsx";
 
 const App: React.FC = () => {
   function Layout() {
@@ -12,10 +20,12 @@ const App: React.FC = () => {
     const location = useLocation();
 
     return token ? (
-      <div className="flex">
+      <div className="flex bg-neutral-900">
         <Sidebar />
-        <Topbar />
-        <Outlet />
+        <div className="w-full nunito-style">
+          <Topbar />
+          <Outlet />
+        </div>
       </div>
     ) : (
       <Navigate to="/login" state={{ from: location }} replace />
@@ -30,6 +40,9 @@ const App: React.FC = () => {
       <Route element={<Layout />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/projects" element={<Projects />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/dump" element={<Trash />} />
       </Route>
     </Routes>
   );

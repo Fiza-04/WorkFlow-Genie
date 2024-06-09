@@ -6,8 +6,8 @@ import {
   faListCheck,
   faChartSimple,
   faUser,
-  faLayerGroup,
-  faUserGroup,
+  // faLayerGroup,
+  // faUserGroup,
   faTrash,
   faGear,
   faRightFromBracket,
@@ -17,14 +17,16 @@ import { useState } from "react";
 const Sidebar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(true);
+  // const [active, setActive] = useState(false);
+
   const MenuItems = [
-    { title: "Profile", src: faUser, route: "" },
-    { title: "Team", src: faUserGroup, route: "" },
+    { title: "Profile", src: faUser, route: "/profile" },
+    // { title: "Team", src: faUserGroup, route: "" },
     { title: "Dashboard", src: faChartSimple, route: "/dashboard" },
-    { title: "Categories", src: faLayerGroup, route: "" },
+    // { title: "Categories", src: faLayerGroup, route: "" },
     { title: "Projects", src: faListCheck, route: "/projects" },
-    { title: "Trash", src: faTrash, route: "" },
-    { title: "Settings", src: faGear, gap: true, route: "" },
+    { title: "Trash", src: faTrash, route: "/dump" },
+    { title: "Settings", src: faGear, gap: true, route: "/settings" },
     {
       title: "Logout",
       src: faRightFromBracket,
@@ -61,11 +63,11 @@ const Sidebar = () => {
       <div
         className={` ${
           open ? "w-72 md:w-60" : "w-20 "
-        } h-screen pl-1 pt-8 relative duration-300 bg-zinc-900`}
+        } h-screen pl-1 pt-8 relative duration-300 bg-neutral-800 right-shadow`}
       >
         <FontAwesomeIcon
           icon={faAngleLeft}
-          className={`absolute cursor-pointer top-24 -right-3 p-[5px] w-5 h-5 border-2 border-zinc-900 bg-white rounded-full  ${
+          className={`absolute cursor-pointer top-32 -right-3 p-[5px] w-3 h-3 border-2 border-neutral-800 bg-white rounded-full  ${
             !open && "rotate-180"
           }`}
           onClick={() => setOpen(!open)}
@@ -89,9 +91,9 @@ const Sidebar = () => {
           {MenuItems.map((menu, index) => (
             <li
               key={index}
-              className={`text-white text-md font-light flex items-center gap-x-4 cursor-pointer p-3 m-2 hover:bg-zinc-700 rounded-md ${
-                menu.gap ? (open ? "mt-24" : "mt-36") : "mt-2"
-              } ${!open && "mr-7"}`}
+              className={`text-white text-md font-light flex items-center gap-x-4 cursor-pointer p-3 m-2 hover:bg-neutral-900 hover-shadow rounded-md ${
+                menu.gap && "mt-52"
+              } ${!open && "mr-6"}`}
               onClick={() => {
                 if (menu.func) {
                   menu.func();
@@ -102,7 +104,7 @@ const Sidebar = () => {
             >
               <FontAwesomeIcon
                 icon={menu.src}
-                className={` ${menu.rotate && "rotate-180"} `}
+                className={` ${menu.rotate && "rotate-180"} w-5 h-5`}
               />
               <span className={`${!open && "hidden"} origin-left duration-700`}>
                 {menu.title}

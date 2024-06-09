@@ -1,0 +1,94 @@
+<div className="text-white ml-2">
+      <div className="flex">
+        <div className={`grid grid-cols-4 gap-4 my-10`}>
+          {cardDetails.map((item, i) => (
+            <div
+              key={i}
+              className={` ${
+                item.type == "project" ? "auto-rows-[1000px]" : ""
+              } bg-neutral-800 rounded-[30px] p-2 flex flex-col items-center justify-center`}
+            >
+              <h2 className="text-xl text-neutral-50">{item.data}</h2>
+              <p>{item.title}</p>
+            </div>
+          ))}
+        </div>
+        {/* <div className="text-xl font-extralight">
+          Hey Riley! <br /> Welcome, to your Genie!
+        </div> */}
+        {/* <div className="flex space-x-4 ml-14 w-[80%]">
+          <div className="grid grid-cols-3 h-20 items-center bg-neutral-800 rounded-[25px]">
+            <div className="flex items-center text-neutral-700 text-3xl justify-center bg-yellow-200 ml-4 h-12 w-12 rounded-full">
+              <FontAwesomeIcon icon={faSpinner} />
+            </div>
+            <div className="">
+              <p className="text-xl">3 Projects</p>
+              <p className="text-sm font-thin text-neutral-400">Pending</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 h-20 items-center bg-neutral-800 rounded-[25px]">
+            <div className="flex items-center text-neutral-700 text-3xl justify-center bg-yellow-200 ml-4 h-12 w-12 rounded-full">
+              <FontAwesomeIcon icon={faSpinner} />
+            </div>
+            <div className="">
+              <p className="text-xl">3 Projects</p>
+              <p className="text-sm font-thin text-neutral-400">Pending</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 h-20 items-center bg-neutral-800 rounded-[25px]">
+            <div className="flex items-center text-neutral-700 text-3xl justify-center bg-yellow-200 ml-4 h-12 w-12 rounded-full">
+              <FontAwesomeIcon icon={faSpinner} />
+            </div>
+            <div className="">
+              <p className="text-xl">3 Projects</p>
+              <p className="text-sm font-thin text-neutral-400">Pending</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="flex mt-4">
+        <div className="flex space-x-4 ml-14">
+          <div className="grid grid-cols-3 h-20 items-center bg-neutral-800 rounded-[25px]">
+            <div className="flex items-center text-neutral-700 text-3xl justify-center bg-yellow-200 ml-4 h-12 w-12 rounded-full">
+              <FontAwesomeIcon icon={faSpinner} />
+            </div>
+            <div className="">
+              <p className="text-xl">3 Projects</p>
+              <p className="text-sm font-thin text-neutral-400">Pending</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 h-20 items-center bg-neutral-800 rounded-[25px]">
+            <div className="flex items-center text-neutral-700 text-3xl justify-center bg-yellow-200 ml-4 h-12 w-12 rounded-full">
+              <FontAwesomeIcon icon={faSpinner} />
+            </div>
+            <div className="">
+              <p className="text-xl">3 Projects</p>
+              <p className="text-sm font-thin text-neutral-400">Pending</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 h-20 items-center bg-neutral-800 rounded-[25px]">
+            <div className="flex items-center text-neutral-700 text-3xl justify-center bg-yellow-200 ml-4 h-12 w-12 rounded-full">
+              <FontAwesomeIcon icon={faSpinner} />
+            </div>
+            <div className="">
+              <p className="text-xl">3 Projects</p>
+              <p className="text-sm font-thin text-neutral-400">Pending</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute top-24 right-10 bg-neutral-800 w-[21%] h-[40%] rounded-[30px]">
+        <div className="flex-col items-center justify-center justify-items-center">
+          <p>Overall Stats</p>
+          <img src="/assets/images/dash_chart.png" className="w-52 h-52" />
+        </div>
+      </div>
+      <div className="absolute mt-4 ml-14 w-[30%] h-[50%] items-center justify-center  bg-neutral-800 rounded-[30px]">
+        Overall Stats
+      </div>
+      <div className="absolute mt-4 ml-14 w-[30%] h-[50%] items-center justify-center  bg-neutral-800 rounded-[30px]">
+        Overall Stats
+      </div> */}
+      </div>
+      {/* remove this div when ctrl+z */}
+    </div>

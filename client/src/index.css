@@ -61,6 +61,10 @@
   .topbar-icons {
     @apply cursor-pointer bg-neutral-900 p-4 rounded-[17px] hover:bg-neutral-800 icon-shadow;
   }
+
+  .dashboard_box {
+    @apply flex flex-col items-start p-5 bg-neutral-800 icon-shadow rounded-[30px] w-[25%] h-72;
+  }
 }
 
 /* text animation */
@@ -95,7 +99,7 @@
 /* text animation end */
 
 /* button animation */
-.basic_btn2 {
+/* .basic_btn2 {
   border-top: 2px solid rgb(207, 205, 219);
   border-left: 2px solid rgb(207, 205, 219);
 }
@@ -109,8 +113,8 @@
 .basic_btn1:hover {
   width: 120px;
   height: 55px;
-  transition: 0.5s ease-in-out;
-}
+  transition: 0.5s ease-in-out; */
+/* } */
 /* button animation */
 
 .landing_img {
@@ -142,6 +146,10 @@
   width: 12%;
   top: 110%;
   right: 3%;
+}
+
+.bg_img {
+  background: url("/assets/images/starry_night.jpg");
 }
 
 .swipe_btn {
@@ -192,12 +200,26 @@
 }
 
 .icon-shadow {
-  background: #171717;
+  background: rgb(38 38 38);
   box-shadow: inset -4px -4px 9px #0e0e0e, inset 4px 4px 9px #202020;
 }
 
 .hover-shadow:hover {
   box-shadow: 0.7px 0.7px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.hover_img {
+  transition: 1s;
+}
+
+.hover_img:hover {
+  margin-top: -20%;
+  margin-left: 20%;
+  transition: 1s ease-in-out;
+}
+
+.bg_shadow {
+  box-shadow: inset 12px 12px 12px #141441, inset -12px -12px 12px #26287d;
 }
 
 @media (max-width: 768px) {

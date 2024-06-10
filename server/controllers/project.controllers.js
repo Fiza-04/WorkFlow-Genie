@@ -22,6 +22,7 @@ const newProject = async (req, res) => {
 };
 
 const getProject = async (req, res) => {};
+
 const getAllProjects = async (req, res) => {
   try {
     const { stage, isTrashed, priority, includeTasks, includeTeam } = req.query;

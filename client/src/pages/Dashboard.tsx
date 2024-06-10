@@ -3,7 +3,15 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSpinner,
+  faListDots,
+  faFireFlameCurved,
+  faPlus,
+  faListCheck,
+  faCheck,
+  faFolder,
+} from "@fortawesome/free-solid-svg-icons";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -13,31 +21,87 @@ const Dashboard = () => {
       color: "bg-red-200",
       data: "3 Projects",
       type: "project",
+      icon: faSpinner,
     },
     {
       title: "Inprogress",
       color: "bg-yellow-200",
       data: "2 Projects",
       type: "project",
+      icon: faListCheck,
     },
     {
       title: "Completed",
       color: "bg-green-200",
       data: "5 Projects",
       type: "project",
+      icon: faCheck,
     },
-    { title: "Pending", color: "bg-red-200", data: "21 Tasks", type: "task" },
+    {
+      title: "Pending",
+      color: "bg-red-200",
+      data: "21 Tasks",
+      type: "task",
+      icon: faSpinner,
+    },
     {
       title: "Inprogress",
       color: "bg-yellow-200",
       data: "25 Tasks",
       type: "task",
+      icon: faListCheck,
     },
     {
       title: "Completed",
       color: "bg-green-200",
       data: "112 Task",
       type: "task",
+      icon: faCheck,
+    },
+  ];
+
+  const taskdata = [
+    {
+      type: "task",
+      title: "Add functions to UI",
+      projName: "WEB 1",
+      endDate: "10 January 2025",
+      priority: "high",
+    },
+    {
+      type: "task",
+      title: "Add functions to UI",
+      projName: "WEB 1",
+      endDate: "10 June 2024",
+      priority: "medium",
+    },
+    {
+      type: "task",
+      title: "Add functions to UI",
+      projName: "WEB 1",
+      endDate: "10 June 2024",
+      priority: "low",
+    },
+    {
+      type: "projects",
+      title: "ProjNAme",
+      createdBy: "Fiza J",
+      endDate: "10 June 2024",
+      priority: "high",
+    },
+    {
+      type: "projects",
+      title: "ProjNAme",
+      createdBy: "Fiza J",
+      endDate: "10 June 2024",
+      priority: "medium",
+    },
+    {
+      type: "projects",
+      title: "ProjNAme",
+      createdBy: "Fiza J",
+      endDate: "10 June 2024",
+      priority: "low",
     },
   ];
 
@@ -63,24 +127,133 @@ const Dashboard = () => {
   }, [navigate]);
 
   return (
-    <div className="text-white ml-2">
-      <div className="flex space-x-3 ml-7 mr-2">
+    <div className="text-white ml-10">
+      <div className="flex space-x-3 mr-2">
         {cardDetails.map((item, index) => (
           <div
             key={index}
-            className="grid grid-cols-3 h-20 items-center bg-neutral-800 rounded-[25px]"
+            className="grid grid-cols-4 h-20 items-center bg-neutral-800 rounded-[25px] icon-shadow"
           >
             <div
-              className={`flex mr-2 items-center text-neutral-700 text-3xl justify-center ${item.color} ml-4 h-12 w-12 rounded-full`}
+              className={`flex mr-1 items-center text-neutral-700 text-xl justify-center ${item.color} ml-4 h-10 w-10 rounded-full`}
             >
-              <FontAwesomeIcon icon={faSpinner} />
+              <FontAwesomeIcon icon={item.icon} />
             </div>
-            <div>
-              <p className="text-md">{item.data}</p>
+            <div className="flex-col w-32 ml-4 mr-0">
+              <p className="text-[15px]">{item.data}</p>
               <p className="text-sm font-thin text-neutral-400">{item.title}</p>
             </div>
           </div>
         ))}
+      </div>
+      <div className="flex mt-2 space-x-4">
+        <div className="flex-col items-center justify-center bg_img bg_shadow rounded-[30px] w-60 h-60 hover:bg-[#19253f] hover:transition hover:duration-500 hover:ease-in-out">
+          <div className="flex items-center pl-5 pt-5">
+            <FontAwesomeIcon icon={faPlus} className="text-2xl" />
+            <p className="pl-5">New Project</p>
+          </div>
+          <img
+            src="/assets/images/rocket_3.png"
+            className="h-60 rotate-45 cursor-pointer hover_img"
+          />
+        </div>
+        <div className="dashboard_box">
+          <p className="mb-3">My Tasks</p>
+          {taskdata.map(
+            (item) =>
+              item.type === "task" && (
+                <div className="mb-4 ml-1">
+                  <div className="flex items-center">
+                    <FontAwesomeIcon icon={faListDots} className="mr-3" />
+                    <div className="w-52">
+                      <p className="text-[15px] font-light">{item.title}</p>
+                    </div>
+                    <FontAwesomeIcon
+                      icon={faFireFlameCurved}
+                      className={`ml-4 ${
+                        item.priority === "high"
+                          ? "text-red-500"
+                          : item.priority === "medium"
+                          ? "text-yellow-300"
+                          : "text-blue-300"
+                      }`}
+                    />
+                  </div>
+                  <p className="ml-7 text-[12px] text-neutral-500">
+                    {item.projName}
+                  </p>
+                  <div
+                    className={`${
+                      item.priority === "high"
+                        ? "bg-red-700"
+                        : item.priority === "medium"
+                        ? "bg-yellow-700"
+                        : "bg-blue-700"
+                    } w-24 rounded-full`}
+                  >
+                    <p className="text-[11px] text-center font-extralight">
+                      {item.endDate}
+                    </p>
+                  </div>
+                </div>
+              )
+          )}
+        </div>
+        <div className="dashboard_box">
+          <p className="mb-3">My Projects</p>
+          {taskdata.map(
+            (item) =>
+              item.type === "projects" && (
+                <div className="mb-4 ml-1">
+                  <div className="flex items-center">
+                    <FontAwesomeIcon icon={faFolder} className="mr-3" />
+                    <div className="w-52">
+                      <p className="text-[15px] font-light">{item.title}</p>
+                    </div>
+                    <FontAwesomeIcon
+                      icon={faFireFlameCurved}
+                      className={`ml-4 ${
+                        item.priority === "high"
+                          ? "text-red-500"
+                          : item.priority === "medium"
+                          ? "text-yellow-300"
+                          : "text-blue-300"
+                      }`}
+                    />
+                  </div>
+                  <p className="ml-7 text-[12px] text-neutral-500">
+                    {item.createdBy}
+                  </p>
+                  <div
+                    className={`${
+                      item.priority === "high"
+                        ? "bg-red-700"
+                        : item.priority === "medium"
+                        ? "bg-yellow-700"
+                        : "bg-blue-700"
+                    } w-24 rounded-full`}
+                  >
+                    <p className="text-[11px] text-center font-extralight">
+                      {item.endDate}
+                    </p>
+                  </div>
+                </div>
+              )
+          )}
+        </div>
+        <div className="bg-neutral-800 icon-shadow rounded-[30px] w-[25%] h-72">
+          OverAll Stats
+        </div>
+      </div>
+      <div className="flex mt-1">
+        <div className="mt-[-3%] bg-neutral-800 icon-shadow rounded-[30px] w-60 h-70 mr-3">
+          Daily Progress
+        </div>
+        <div className="w-[35%] h-52">Bar Chart</div>
+        <div className="bg-neutral-800 ml-3 icon-shadow rounded-[30px] w-52 h-52">
+          Team members
+        </div>
+        <div className="w-[19rem] h-52">Calendar</div>
       </div>
     </div>
   );

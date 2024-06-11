@@ -23,6 +23,17 @@ const newProject = async (req, res) => {
 
 const duplicateProject = async (req, res) => {
   try {
+    const { id } = req.params;
+    const project = await Project.findById(id);
+    const newProjectData = {
+      ...project.toObject(),
+      _id: undefined,
+      title: `${project.title} - Copy`,
+    };
+
+    const newProject = new Project(newProjectData);
+
+    await newProject.save();
     res
       .status(201)
       .json({ status: true, message: "Project created successfully." });
@@ -146,29 +157,33 @@ const trashProject = async (req, res) => {
   }
 };
 
-// check working
 const deleteRestoreProject = async (req, res) => {
   try {
     const { id } = req.params;
     const { action } = req.query;
-
+    let message = "";
     if (action === "delete") {
       await Project.findByIdAndDelete(id);
+      message = "Project deleted successfully!";
     } else if (action === "deleteAll") {
-      await Project.deleteMany({ isTrashed: true });
+      await Project.deleteMany(
+        { isTrashed: false },
+        { $set: { isTrashed: true } }
+      );
+      message = "All projects deleted successfully!";
     } else if (action === "restore") {
       const resp = await Project.findById(id);
       resp.isTrashed = false;
       resp.save();
+      message = "Project restored successfully!";
     } else if (action === "restoreAll") {
       await Project.updateMany(
         { isTrashed: true },
         { $set: { isTrashed: false } }
       );
+      message = "All projects restored successfully!";
     }
-    res
-      .status(200)
-      .json({ status: true, message: "Project created successfully." });
+    res.status(200).json({ status: true, message: message });
   } catch (error) {
     return res.status(400).json({ status: false, message: error.message });
   }

@@ -4,7 +4,6 @@ const { Schema } = mongoose;
 const TaskSchema = new Schema(
   {
     taskTitle: { type: String, required: true },
-    taskDoc: { type: Date, default: Date.now },
     taskEod: { type: Date, required: true },
     taskDesc: { type: String },
     taskPriority: {
@@ -19,6 +18,7 @@ const TaskSchema = new Schema(
       enum: ["pending", "in-progress", "completed"],
       required: true,
     },
+    project: { type: Schema.Types.ObjectId, ref: "Project", required: true },
     assignedTo: [{ type: Schema.Types.ObjectId, ref: "User" }],
     assignedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     taskIsTrashed: { type: Boolean, default: false, required: true },

@@ -9,7 +9,6 @@ const UserSchema = new Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     token: { type: String },
-    isAdmin: { type: Boolean, default: false, required: true },
     isActive: { type: Boolean, default: true, required: true },
     projects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
   },

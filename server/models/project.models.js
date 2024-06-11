@@ -9,7 +9,7 @@ const ProjectSchema = new Schema(
     priority: {
       type: String,
       default: "normal",
-      enum: ["low", "normal", "medium", "high"],
+      enum: ["normal", "medium", "high"],
       required: true,
     },
     stage: {

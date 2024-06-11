@@ -10,6 +10,7 @@ const registerUser = async (req, res) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       username: req.body.username,
+      isAdmin: req.body.isAdmin,
       email: req.body.email,
       password: newPassword,
     });

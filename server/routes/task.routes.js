@@ -1,25 +1,25 @@
 const express = require("express");
 const {
   newTask,
-  duplicateTask,
+  // duplicateTask,
   // getAllTasks,
-  // getTask,
-  // updateTask,
-  // trashTask,
-  // deleteRestoreTask,
+  getTasks,
+  updateTask,
+  trashTask,
+  deleteRestoreTask,
 } = require("../controllers/task.controllers.js");
 
 const router = express.Router();
 
 router.post("/new-task", newTask);
-router.post("/duplicate/:id", duplicateTask);
+// router.post("/duplicate/:id", duplicateTask);
 
 // router.get("/", getAllTasks);
-// router.get("/:id", getTask);
+router.get("/:id", getTasks);
 
-// router.put("/update/:id", updateTask);
-// router.put("/:id", trashTask);
+router.put("/update/:id", updateTask);
+router.put("/:id", trashTask);
 
-// router.delete("/delete-restore/:id?", deleteRestoreTask);
+router.delete("/delete-restore/:id?", deleteRestoreTask);
 
 module.exports = router;

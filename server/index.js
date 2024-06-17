@@ -20,6 +20,6 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use("/api", userRoutes);
 app.use("/api", projectRoutes);
-app.use("/api", taskRoutes);
+app.use("/api/task", taskRoutes);
 
 app.listen(PORT, () => console.log(`Server listening on port -> ${PORT}`));

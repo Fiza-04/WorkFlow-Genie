@@ -204,6 +204,22 @@
   box-shadow: inset -4px -4px 9px #0e0e0e, inset 4px 4px 9px #202020;
 }
 
+.purple_shadow {
+  box-shadow: inset 8px 8px 10px #b395d3, inset -8px -8px 10px #fdd3ff;
+}
+
+.red_shadow {
+  box-shadow: inset 8px 8px 10px #ddb0b0, inset -8px -8px 10px #ffe4e4;
+}
+
+.yellow_shadow {
+  box-shadow: inset 10px 10px 7px #e2d67b, inset -12px -12px 10px #ffff99;
+}
+
+.green_shadow {
+  box-shadow: inset 12px 12px 7px #7ad99d, inset -12px -12px 5px #92ffbb;
+}
+
 .hover-shadow:hover {
   box-shadow: 0.7px 0.7px 1px 1px rgba(0, 0, 0, 0.5);
 }

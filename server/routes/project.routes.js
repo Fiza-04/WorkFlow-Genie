@@ -1,7 +1,7 @@
 const express = require("express");
 const {
   newProject,
-  duplicateProject,
+  // duplicateProject,
   getAllProjects,
   getProject,
   updateProject,
@@ -12,7 +12,7 @@ const {
 const router = express.Router();
 
 router.post("/new-project", newProject);
-router.post("/duplicate/:id", duplicateProject);
+// router.post("/duplicate/:id", duplicateProject);
 
 router.get("/", getAllProjects);
 router.get("/:id", getProject);

@@ -1,10 +1,12 @@
 const Project = require("../models/project.models.js");
+const User = require("../models/user.models.js");
+const Task = require("../models/task.models.js");
 
 const newProject = async (req, res) => {
   const { title, eod, desc, priority, stage, team, createdBy } = req.body;
 
   try {
-    await Project.create({
+    const newProject = await Project.create({
       title: title,
       eod: eod,
       desc: desc,
@@ -13,6 +15,12 @@ const newProject = async (req, res) => {
       team: team,
       createdBy: createdBy,
     });
+
+    await User.updateMany(
+      { _id: { $in: team } },
+      { $push: { projects: newProject._id } }
+    );
+
     res
       .status(201)
       .json({ status: true, message: "Project created successfully." });
@@ -21,26 +29,49 @@ const newProject = async (req, res) => {
   }
 };
 
-const duplicateProject = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const project = await Project.findById(id);
-    const newProjectData = {
-      ...project.toObject(),
-      _id: undefined,
-      title: `${project.title} - Copy`,
-    };
+// const duplicateProject = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const userId = req.user._id;
 
-    const newProject = new Project(newProjectData);
+//     const project = await Project.findById(id);
 
-    await newProject.save();
-    res
-      .status(201)
-      .json({ status: true, message: "Project created successfully." });
-  } catch (error) {
-    return res.status(400).json({ status: false, message: error.message });
-  }
-};
+//     if (project.createdBy.toString() !== userId.toString()) {
+//       return res.status(403).json({
+//         status: false,
+//         message: "You are not authorized to duplicate this project.",
+//       });
+//     }
+
+//     const newProjectData = {
+//       ...project.toObject(),
+//       _id: undefined,
+//       title: `${project.title} - Copy`,
+//     };
+
+//     const newProject = new Project(newProjectData);
+//     await newProject.save();
+
+//     const tasks = await Task.find({ project: id });
+
+//     const newTasks = tasks.map((task) => {
+//       const newTaskData = {
+//         ...task.toObject(),
+//         _id: undefined,
+//         project: newProject._id,
+//       };
+//       return new Task(newTaskData);
+//     });
+
+//     await Task.insertMany(newTasks);
+
+//     res
+//       .status(201)
+//       .json({ status: true, message: "Project created successfully." });
+//   } catch (error) {
+//     return res.status(400).json({ status: false, message: error.message });
+//   }
+// };
 
 const getProject = async (req, res) => {
   try {
@@ -67,7 +98,8 @@ const getAllProjects = async (req, res) => {
     const { stage, isTrashed, priority, includeProjects, includeTeam } =
       req.query;
 
-    let query = { isTrashed: isTrashed ? true : false };
+    const userId = req.user._id;
+    let query = { isTrashed: isTrashed ? true : false, team: userId };
 
     if (stage) {
       query.stage = stage;
@@ -107,23 +139,36 @@ const getAllProjects = async (req, res) => {
 const updateProject = async (req, res) => {
   try {
     const { id } = req.params;
+    const userId = req.user._id;
 
-    const project = await Project.findByIdAndUpdate(
-      id,
-      {
+    const project = await Project.findById(id);
+    let data = {};
+
+    if (project.createdBy.toString() !== userId.toString()) {
+      data = {
         title: req.body.title,
         eod: req.body.eod,
         desc: req.body.desc,
         priority: req.body.priority,
-        stage: req.body.stage,
         team: req.body.team,
         createdBy: req.body.createdBy,
         isTrashed: req.body.isTrashed,
-      },
+      };
+    } else {
+      res.status(400).json({
+        status: false,
+        message: "You are not authorised to perform this action",
+      });
+    }
+
+    const projectData = await Project.findByIdAndUpdate(
+      id,
+      ...data,
+      { stage: req.body.stage },
       { new: true, runValidators: true }
     );
 
-    if (!project) {
+    if (!projectData) {
       return res
         .status(404)
         .json({ status: false, message: "Project not found" });
@@ -132,7 +177,7 @@ const updateProject = async (req, res) => {
     res.status(200).json({
       status: true,
       message: "Project updated Successfully",
-      project,
+      projectData,
     });
   } catch (error) {
     res.status(400).json({ status: false, message: error.message });
@@ -142,9 +187,17 @@ const updateProject = async (req, res) => {
 const trashProject = async (req, res) => {
   try {
     const { id } = req.params;
+    const userId = req.user._id;
     const project = await Project.findById(id);
 
-    project.isTrashed = true;
+    if (project.createdBy.toString() !== userId.toString()) {
+      project.isTrashed = true;
+    } else {
+      res.status(400).json({
+        status: false,
+        message: "You are not authorised to perform this action",
+      });
+    }
 
     await project.save();
     res.status(200).json({
@@ -160,29 +213,39 @@ const trashProject = async (req, res) => {
 const deleteRestoreProject = async (req, res) => {
   try {
     const { id } = req.params;
+    const userId = req.user._id;
     const { action } = req.query;
-    let message = "";
-    if (action === "delete") {
-      await Project.findByIdAndDelete(id);
-      message = "Project deleted successfully!";
-    } else if (action === "deleteAll") {
-      await Project.deleteMany(
-        { isTrashed: false },
-        { $set: { isTrashed: true } }
-      );
-      message = "All projects deleted successfully!";
-    } else if (action === "restore") {
-      const resp = await Project.findById(id);
-      resp.isTrashed = false;
-      resp.save();
-      message = "Project restored successfully!";
-    } else if (action === "restoreAll") {
-      await Project.updateMany(
-        { isTrashed: true },
-        { $set: { isTrashed: false } }
-      );
-      message = "All projects restored successfully!";
+    const project = Project.findById(id);
+    if (project.createdBy.toString() !== userId.toString()) {
+      let message = "";
+      if (action === "delete") {
+        await Project.findByIdAndDelete(id);
+        message = "Project deleted successfully!";
+      } else if (action === "deleteAll") {
+        await Project.deleteMany(
+          { isTrashed: false },
+          { $set: { isTrashed: true } }
+        );
+        message = "All projects deleted successfully!";
+      } else if (action === "restore") {
+        const resp = await Project.findById(id);
+        resp.isTrashed = false;
+        resp.save();
+        message = "Project restored successfully!";
+      } else if (action === "restoreAll") {
+        await Project.updateMany(
+          { isTrashed: true },
+          { $set: { isTrashed: false } }
+        );
+        message = "All projects restored successfully!";
+      }
+    } else {
+      res.status(400).json({
+        status: false,
+        message: "You are not authorised to perform this action",
+      });
     }
+
     res.status(200).json({ status: true, message: message });
   } catch (error) {
     return res.status(400).json({ status: false, message: error.message });
@@ -191,7 +254,7 @@ const deleteRestoreProject = async (req, res) => {
 
 module.exports = {
   newProject,
-  duplicateProject,
+  // duplicateProject,
   getProject,
   getAllProjects,
   updateProject,

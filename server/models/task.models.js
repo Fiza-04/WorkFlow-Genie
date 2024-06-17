@@ -19,7 +19,7 @@ const TaskSchema = new Schema(
       required: true,
     },
     project: { type: Schema.Types.ObjectId, ref: "Project", required: true },
-    assignedTo: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    assignedTo: { type: Schema.Types.ObjectId, ref: "User" },
     assignedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
     taskIsTrashed: { type: Boolean, default: false, required: true },
     taskCreatedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },

@@ -11,6 +11,7 @@ const UserSchema = new Schema(
     token: { type: String },
     isActive: { type: Boolean, default: true, required: true },
     projects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
+    tasks: [{ type: Schema.Types.ObjectId, ref: "Tasks" }], // added to get all the tasks assignedto a user
   },
   {
     timestamps: true,

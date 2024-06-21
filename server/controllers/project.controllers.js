@@ -98,8 +98,8 @@ const getAllProjects = async (req, res) => {
     const { stage, isTrashed, priority, includeProjects, includeTeam } =
       req.query;
 
-    const userId = req.user._id;
-    let query = { isTrashed: isTrashed ? true : false, team: userId };
+    // const userId = req.user._id;
+    let query = { isTrashed: isTrashed ? true : false }; //, team: userId
 
     if (stage) {
       query.stage = stage;

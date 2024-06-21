@@ -83,67 +83,90 @@ const newTask = async (req, res) => {
 //   }
 // };
 
+const getTask = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const task = await Task.findById(id)
+      .populate({
+        path: "assignedTo",
+        select: "name",
+      })
+      .populate({
+        path: "assignedBy",
+        select: "name,",
+      })
+      .sort({ _id: -1 });
+
+    res.status(200).json({
+      status: true,
+      tasks: task,
+      message: "Task Received Successfully",
+    });
+  } catch (error) {
+    return res.status(400).json({ status: false, message: error.message });
+  }
+};
+
 const getTasks = async (req, res) => {
   try {
-    const {
-      taskStage,
-      taskPriority,
-      taskIsTrashed,
-      includeTasks,
-      includeTeam,
-    } = req.query;
-
-    const projectId = req.params;
-
-    let query = { taskIsTrashed: taskIsTrashed ? true : false };
-
-    if (taskStage) {
-      query.taskStage = taskStage;
-    }
-
-    if (taskPriority) {
-      query.taskPriority = taskPriority;
-    }
+    const { projectId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(projectId)) {
-      return res
-        .status(400)
-        .json({ status: false, message: `Invalid project ID: ${projectId}` });
-    }
-
-    let queryResult = Task.find(query).sort({ _id: -1 });
-
-    if (includeTeam === "true") {
-      queryResult = queryResult.populate({
-        path: "assignedTo assignedBy taskCreatedBy",
-        select: "name email",
+      return res.status(400).json({
+        status: false,
+        message: `Invalid project ID: ${projectId}`,
       });
     }
 
-    if (includeTasks === "true") {
-      queryResult = queryResult.populate({
-        path: "project",
-        match: { _id: mongoose.Types.ObjectId(projectId) },
-        populate: {
-          path: "tasks",
-          select: "taskTitle taskEod taskPriority taskStage",
-          populate: {
-            path: "assignedTo assignedBy taskCreatedBy",
-            select: "name email",
-          },
-        },
+    const tasks = await Task.find({ project: projectId }).populate({
+      path: "assignedTo assignedBy taskCreatedBy",
+      select: "name email",
+    });
+
+    if (tasks.length === 0) {
+      return res.status(404).json({
+        status: false,
+        message: "No tasks found for this project",
       });
     }
-    const tasks = await queryResult;
 
     res.status(200).json({
       status: true,
       tasks: tasks,
-      message: "Tasks Received Successfully",
+      message: "Tasks received successfully",
     });
   } catch (error) {
     console.error("Error fetching tasks:", error);
-    return res.status(400).json({ status: false, message: error.message });
+    return res.status(500).json({
+      status: false,
+      message: "Server error. Please try again later.",
+    });
+  }
+};
+
+const taskCount = async (req, res) => {
+  const { projectId } = req.params;
+
+  try {
+    console.log("here");
+    const taskCounts = await Task.aggregate([
+      { $match: { project: mongoose.Types.ObjectId(projectId) } },
+      {
+        $group: {
+          _id: "$taskStage",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    const formattedCounts = taskCounts.reduce((acc, { _id, count }) => {
+      acc[_id] = count;
+      return acc;
+    }, {});
+
+    res.json({ status: true, taskCounts: formattedCounts });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: false, message: "Server error" });
   }
 };
 
@@ -167,6 +190,8 @@ const updateTask = async (req, res) => {
       { new: true, runValidators: true }
     );
 
+    const query = { project: projectId };
+    const tasks = Task.find().project(query);
     if (!task) {
       return res.status(404).json({ status: false, message: "Task not found" });
     }
@@ -235,7 +260,9 @@ module.exports = {
   newTask,
   // duplicateTask,
   // getAllTasks,
+  getTask,
   getTasks,
+  taskCount,
   updateTask,
   trashTask,
   deleteRestoreTask,

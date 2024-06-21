@@ -238,6 +238,11 @@
   box-shadow: inset 12px 12px 12px #141441, inset -12px -12px 12px #26287d;
 }
 
+.project_shadow {
+  background: #fecaca;
+  box-shadow: inset 7px 7px 11px #bf9898, inset -7px -7px 11px #fffdfd;
+}
+
 @media (max-width: 768px) {
   .landing_img {
     width: 50%;

@@ -145,28 +145,42 @@ const getTasks = async (req, res) => {
 };
 
 const taskCount = async (req, res) => {
-  const { projectId } = req.params;
-
   try {
-    console.log("here");
-    const taskCounts = await Task.aggregate([
-      { $match: { project: mongoose.Types.ObjectId(projectId) } },
-      {
-        $group: {
-          _id: "$taskStage",
-          count: { $sum: 1 },
-        },
-      },
-    ]);
-    const formattedCounts = taskCounts.reduce((acc, { _id, count }) => {
-      acc[_id] = count;
-      return acc;
-    }, {});
+    const { projectId } = req.params;
 
-    res.json({ status: true, taskCounts: formattedCounts });
+    if (!mongoose.Types.ObjectId.isValid(projectId)) {
+      return res.status(400).json({
+        status: false,
+        message: `Invalid project ID: ${projectId}`,
+      });
+    }
+
+    const pending = await Task.countDocuments({
+      project: projectId,
+      taskStage: "pending",
+    });
+    const progress = await Task.countDocuments({
+      project: projectId,
+      taskStage: "in-progress",
+    });
+    const completed = await Task.countDocuments({
+      project: projectId,
+      taskStage: "completed",
+    });
+
+    let taskCounts = {
+      pending: pending,
+      inProgress: progress,
+      completed: completed,
+    };
+
+    res.json({
+      status: true,
+      count: taskCounts,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ status: false, message: "Server error" });
+    console.error("Error fetching task counts:", error);
+    res.status(500).json({ status: false, message: "No tasks found1" });
   }
 };
 

@@ -65,6 +65,10 @@
   .dashboard_box {
     @apply flex flex-col items-start p-5 bg-neutral-800 icon-shadow rounded-[30px] w-[25%] h-72;
   }
+
+  .input-style {
+    @apply bg-neutral-900 border rounded-[10px] h-11 p-2;
+  }
 }
 
 /* text animation */
@@ -241,6 +245,17 @@
 .project_shadow {
   background: #fecaca;
   box-shadow: inset 7px 7px 11px #bf9898, inset -7px -7px 11px #fffdfd;
+}
+
+.scrollable-div {
+  height: calc(90vh - 4rem);
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollable-div::-webkit-scrollbar {
+  display: none;
 }
 
 @media (max-width: 768px) {

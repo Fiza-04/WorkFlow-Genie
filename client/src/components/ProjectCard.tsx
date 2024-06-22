@@ -1,33 +1,6 @@
-import { useEffect, useRef } from "react";
 import { dateFormat } from "../utils/dataOperations";
 
-const ProjectCard = ({ project }) => {
-  const hasFetchedData = useRef(false);
-
-  async function getTaskCount() {
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/task/count/${project._id}`
-      );
-
-      if (!response.status) {
-        throw new Error("Tasks not fetched");
-      }
-
-      const result = await response.json();
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {
-    if (!hasFetchedData.current) {
-      getTaskCount(project._id);
-      hasFetchedData.current = true;
-    }
-  }, [project._id]);
-
+const ProjectCard = ({ project, taskCounts }) => {
   return (
     <div
       key={project._id}
@@ -51,13 +24,20 @@ const ProjectCard = ({ project }) => {
         </div>
         <div className="flex flex-row font-light text-[12px] space-x-6">
           <p>
-            <b className="font-bold text-[15px]">12</b> Pending
+            <b className="font-bold text-[15px]">{taskCounts?.pending || 0} </b>
+            Pending
           </p>
           <p>
-            <b className="font-bold text-[15px]">12</b> In-progress
+            <b className="font-bold text-[15px]">
+              {taskCounts?.inProgress || 0}{" "}
+            </b>
+            In-progress
           </p>
           <p>
-            <b className="font-bold text-[15px]">8</b> Completed
+            <b className="font-bold text-[15px]">
+              {taskCounts?.completed || 0}{" "}
+            </b>
+            Completed
           </p>
         </div>
       </div>

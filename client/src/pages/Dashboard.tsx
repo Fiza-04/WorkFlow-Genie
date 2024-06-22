@@ -7,11 +7,11 @@ import {
   faSpinner,
   faListDots,
   faFireFlameCurved,
-  faPlus,
   faListCheck,
   faCheck,
   faFolder,
 } from "@fortawesome/free-solid-svg-icons";
+import AddProject from "../components/AddProject";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -19,43 +19,43 @@ const Dashboard = () => {
     {
       title: "Pending",
       color: "bg-red-200",
-      data: "3 Projects",
-      type: "project",
+      data: "0",
+      type: "Project",
       icon: faSpinner,
     },
     {
       title: "Inprogress",
       color: "bg-yellow-200",
-      data: "2 Projects",
-      type: "project",
+      data: "0",
+      type: "Project",
       icon: faListCheck,
     },
     {
       title: "Completed",
       color: "bg-green-200",
-      data: "5 Projects",
-      type: "project",
+      data: "0",
+      type: "Project",
       icon: faCheck,
     },
     {
       title: "Pending",
       color: "bg-red-200",
-      data: "21 Tasks",
-      type: "task",
+      data: "0",
+      type: "Tasks",
       icon: faSpinner,
     },
     {
       title: "Inprogress",
       color: "bg-yellow-200",
-      data: "25 Tasks",
-      type: "task",
+      data: "0",
+      type: "Tasks",
       icon: faListCheck,
     },
     {
       title: "Completed",
       color: "bg-green-200",
-      data: "112 Task",
-      type: "task",
+      data: "0",
+      type: "Tasks",
       icon: faCheck,
     },
   ];
@@ -140,23 +140,16 @@ const Dashboard = () => {
               <FontAwesomeIcon icon={item.icon} />
             </div>
             <div className="flex-col w-32 ml-4 mr-0">
-              <p className="text-[15px]">{item.data}</p>
+              <p className="text-[15px]">
+                {item.data} {item.type}
+              </p>
               <p className="text-sm font-thin text-neutral-400">{item.title}</p>
             </div>
           </div>
         ))}
       </div>
       <div className="flex mt-2 space-x-4">
-        <div className="flex-col items-center justify-center bg_img bg_shadow rounded-[30px] w-60 h-60 hover:bg-[#19253f] hover:transition hover:duration-500 hover:ease-in-out">
-          <div className="flex items-center pl-5 pt-5">
-            <FontAwesomeIcon icon={faPlus} className="text-2xl" />
-            <p className="pl-5">New Project</p>
-          </div>
-          <img
-            src="/assets/images/rocket_3.png"
-            className="h-60 rotate-45 cursor-pointer hover_img"
-          />
-        </div>
+        <AddProject />
         <div className="dashboard_box">
           <p className="mb-3">My Tasks</p>
           {taskdata.map(

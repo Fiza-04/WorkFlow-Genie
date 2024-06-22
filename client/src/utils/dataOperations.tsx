@@ -7,22 +7,21 @@ export function dateFormat(isoDate) {
   return `${day}-${month}-${year}`;
 }
 
-// export async function getTaskCount(projectId) {
-//   try {
-//     const response = await fetch(
-//       `http://localhost:3000/api/task/project/${projectId}`
-//     );
+export async function fetchTaskCounts(projectId) {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/task/count/${projectId}`
+    );
 
-//     if (!response.status) {
-//       throw new Error("Tasks not fetched");
-//     }
+    if (!response.status) {
+      throw new Error("Tasks not fetched");
+    }
 
-//     const result = await response.json();
-//     console.log(result);
-//     return "Hi";
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Error fetching task counts:", error);
+  }
+}
 
 // export function getProjectCount() {}

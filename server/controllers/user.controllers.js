@@ -1,4 +1,3 @@
-require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("../models/user.models.js");
@@ -82,11 +81,35 @@ const loginUser = async (req, res) => {
   }
 };
 
+getCurrentUser = async (req, res) => {
+  try {
+    const { email } = req.params;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return { status: "error", error: "No such User Found!" };
+    }
+
+    res.status(200).json(user._id);
+  } catch (error) {
+    res.status(404).json({ message: "User cannot be found", error });
+  }
+};
+
+const getUsers = async (req, res) => {
+  try {
+    const users = await User.find().select("username email _id");
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching users", error });
+  }
+};
+
 const logoutUser = async (req, res) => {
   try {
     res.cookie("token", "", {
       httpOnly: true,
-      expires: new Date(0), // Set to expire immediately
+      expires: new Date(0),
     });
     res.status(200).json({ status: "ok", message: "Logout Successful" });
   } catch (error) {
@@ -94,4 +117,10 @@ const logoutUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser, logoutUser };
+module.exports = {
+  registerUser,
+  loginUser,
+  getUsers,
+  getCurrentUser,
+  logoutUser,
+};

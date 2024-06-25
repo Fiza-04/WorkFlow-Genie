@@ -4,7 +4,6 @@ const Task = require("../models/task.models.js");
 
 const newProject = async (req, res) => {
   const { title, eod, desc, priority, stage, team, createdBy } = req.body;
-
   try {
     const newProject = await Project.create({
       title: title,
@@ -28,50 +27,6 @@ const newProject = async (req, res) => {
     return res.status(400).json({ status: false, message: error.message });
   }
 };
-
-// const duplicateProject = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const userId = req.user._id;
-
-//     const project = await Project.findById(id);
-
-//     if (project.createdBy.toString() !== userId.toString()) {
-//       return res.status(403).json({
-//         status: false,
-//         message: "You are not authorized to duplicate this project.",
-//       });
-//     }
-
-//     const newProjectData = {
-//       ...project.toObject(),
-//       _id: undefined,
-//       title: `${project.title} - Copy`,
-//     };
-
-//     const newProject = new Project(newProjectData);
-//     await newProject.save();
-
-//     const tasks = await Task.find({ project: id });
-
-//     const newTasks = tasks.map((task) => {
-//       const newTaskData = {
-//         ...task.toObject(),
-//         _id: undefined,
-//         project: newProject._id,
-//       };
-//       return new Task(newTaskData);
-//     });
-
-//     await Task.insertMany(newTasks);
-
-//     res
-//       .status(201)
-//       .json({ status: true, message: "Project created successfully." });
-//   } catch (error) {
-//     return res.status(400).json({ status: false, message: error.message });
-//   }
-// };
 
 const getProject = async (req, res) => {
   try {
@@ -254,7 +209,6 @@ const deleteRestoreProject = async (req, res) => {
 
 module.exports = {
   newProject,
-  // duplicateProject,
   getProject,
   getAllProjects,
   updateProject,

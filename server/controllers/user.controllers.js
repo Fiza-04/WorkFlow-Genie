@@ -96,6 +96,16 @@ getCurrentUser = async (req, res) => {
   }
 };
 
+const getUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).select("username");
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching users", error });
+  }
+};
+
 const getUsers = async (req, res) => {
   try {
     const users = await User.find().select("username email _id");
@@ -121,6 +131,7 @@ module.exports = {
   registerUser,
   loginUser,
   getUsers,
+  getUser,
   getCurrentUser,
   logoutUser,
 };

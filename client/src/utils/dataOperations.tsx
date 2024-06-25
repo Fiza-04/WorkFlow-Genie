@@ -1,3 +1,6 @@
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
+
 export function dateFormat(isoDate) {
   const parts = isoDate.split("T")[0].split("-");
   const year = parts[0];
@@ -5,6 +8,46 @@ export function dateFormat(isoDate) {
   const day = parts[2];
 
   return `${day}-${month}-${year}`;
+}
+
+export async function authControll(navigate, flag = false) {
+  const token = Cookies.get("token");
+  console.log("token => ", token);
+
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  try {
+    const user = jwtDecode(token);
+    if (!user) {
+      Cookies.remove("token");
+      navigate("/login");
+    }
+
+    if (flag) {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/current-user/${user.email}`
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const userId = await response.json();
+        return { ...user, userId };
+      } catch (error) {
+        console.error("Failed to fetch user ID:", error);
+        Cookies.remove("token");
+        navigate("/login");
+      }
+    }
+    return user;
+  } catch (error) {
+    console.error("Invalid token:", error);
+    Cookies.remove("token");
+    navigate("/login");
+  }
 }
 
 export async function fetchTaskCounts(projectId) {

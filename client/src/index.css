@@ -243,8 +243,19 @@
 }
 
 .project_shadow {
-  background: #fecaca;
   box-shadow: inset 7px 7px 11px #bf9898, inset -7px -7px 11px #fffdfd;
+}
+
+.normal_shadow {
+  box-shadow: inset 10px 10px 10px #acc5e5, inset -10px -10px 10px #d2f1ff;
+}
+
+.medium_shadow {
+  box-shadow: inset 7px 7px 7px #c2a2e5, inset -10px -10px 7px #eec6ff;
+}
+
+.high_shadow {
+  box-shadow: inset 7px 7px 7px #e5b6b6, inset -10px -10px 7px #ffdede;
 }
 
 .scrollable-div {

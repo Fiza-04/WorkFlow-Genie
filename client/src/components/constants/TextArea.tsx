@@ -2,7 +2,7 @@ const TextArea = ({ value, onChange }) => {
   return (
     <div className="pt-2">
       <label
-        for="message"
+        htmlFor="message"
         className="block mb-2 font-medium text-neutral-900 dark:text-white"
       >
         Tell me more!

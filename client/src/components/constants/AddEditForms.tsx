@@ -1,16 +1,88 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import TextArea from "./TextArea";
+import MultiSelectDropdown from "./MultiSelectDropdown";
+import { authControll } from "../../utils/dataOperations";
 
 const AddEditForms = ({ onClick }) => {
-  const [title, setTitle] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [desc, setDesc] = useState("");
-  const [priority, setPriority] = useState("");
-  const [stage, setStage] = useState("");
-  const [team, setTeam] = useState("");
-  const [createdBy, setCreatedBy] = useState("");
+  const hasFetchedData = useRef(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = async () => {};
+  const [title, setTitle] = useState("");
+  const [eod, setEndDate] = useState("");
+  const [desc, setDesc] = useState("");
+  const [priority, setPriority] = useState("normal");
+  const [stage, setStage] = useState("pending");
+  const [teamIds, setTeamIds] = useState([]);
+  const [options, setOptions] = useState([]);
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const user = await authControll(navigate, true);
+      if (user) {
+        setUserId(user.userId);
+        fetchUsername(user.userId);
+      }
+    };
+
+    if (!hasFetchedData.current) {
+      fetchData();
+      hasFetchedData.current = true;
+    }
+  }, []);
+
+  const fetchUsername = async (currentUserId) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/users");
+      if (!response.ok) {
+        throw new Error("Failed to fetch data");
+      }
+      const result = await response.json();
+
+      const filteredOptions = result.filter(
+        (user) => user._id !== currentUserId
+      );
+      console.log(filteredOptions);
+      setOptions(filteredOptions);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const addProject = async (event) => {
+    event.preventDefault();
+    const team = [...teamIds, userId];
+    console.log(team);
+    const response = await fetch("http://localhost:3000/api/new-project", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title,
+        eod,
+        desc,
+        priority,
+        stage,
+        team: team,
+        createdBy: userId,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.status) {
+      alert("Project Added Successfully");
+      onClick(true);
+    } else {
+      alert("Error adding project");
+    }
+  };
+
+  const handleSelect = (selectedUsers) => {
+    setTeamIds(selectedUsers);
+  };
 
   const handlePriorityChange = (event) => {
     setPriority(event.target.value);
@@ -31,7 +103,7 @@ const AddEditForms = ({ onClick }) => {
 
       <form
         className="flex flex-col space-y-10 pl-5 pr-5"
-        onSubmit={handleSubmit}
+        onSubmit={addProject}
       >
         <div className="flex flex-col space-y-1">
           <label htmlFor="title">Project Name</label>
@@ -47,7 +119,7 @@ const AddEditForms = ({ onClick }) => {
           <div className="flex flex-col space-y-1">
             <label htmlFor="endDate">End Date</label>
             <input
-              value={endDate}
+              value={eod}
               onChange={(e) => setEndDate(e.target.value)}
               type="date"
               placeholder="End Date"
@@ -71,8 +143,8 @@ const AddEditForms = ({ onClick }) => {
           <div className="flex flex-col space-y-1">
             <label htmlFor="stage">Stage</label>
             <select
-              id="priority"
-              name="priority"
+              id="stage"
+              name="stage"
               value={stage}
               onChange={handleStageChange}
               className="input-style  w-40"
@@ -85,21 +157,10 @@ const AddEditForms = ({ onClick }) => {
         </div>
         <TextArea value={desc} onChange={(e) => setDesc(e.target.value)} />
         <div className="flex flex-col space-y-1">
-          <label>Add More of your kind!</label>
-          <input
-            value={team}
-            onChange={(e) => setTeam(e.target.value)}
-            type="text"
-            placeholder="Add Team"
-            className="input-style"
-          />
+          <label>Select Team Members</label>
+          <MultiSelectDropdown options={options} onSelect={handleSelect} />
         </div>
 
-        <input
-          value={createdBy}
-          onChange={(e) => setCreatedBy(e.target.value)}
-          type="hidden"
-        />
         <input type="submit" value="Add Project" />
       </form>
     </div>

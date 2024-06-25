@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post("/new-project", newProject);
 
-router.get("/", getAllProjects);
+router.get("/all/:userId", getAllProjects);
 router.get("/:id", getProject);
 
 router.put("/update/:id", updateProject);

@@ -50,11 +50,13 @@ const getProject = async (req, res) => {
 
 const getAllProjects = async (req, res) => {
   try {
-    const { stage, isTrashed, priority, includeProjects, includeTeam } =
-      req.query;
+    const { stage, isTrashed, priority } = req.query;
+    const userId = req.params;
 
-    // const userId = req.user._id;
-    let query = { isTrashed: isTrashed ? true : false }; //, team: userId
+    let query = {
+      isTrashed: isTrashed === "true",
+      $or: [{ createdBy: userId }, { team: userId }],
+    };
 
     if (stage) {
       query.stage = stage;
@@ -66,22 +68,10 @@ const getAllProjects = async (req, res) => {
 
     let queryResult = Project.find(query).sort({ _id: -1 });
 
-    if (includeTeam === "true") {
-      queryResult = queryResult.populate({
-        path: "team",
-        select: "name",
-      });
-    }
-
-    if (includeProjects === "true") {
-      queryResult = queryResult.populate({
-        path: "Projects",
-        populate: {
-          path: "team",
-          select: "name email",
-        },
-      });
-    }
+    queryResult = queryResult.populate({
+      path: "createdBy team",
+      select: "username",
+    });
 
     const projects = await queryResult;
 

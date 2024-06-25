@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSpinner,
@@ -11,7 +9,8 @@ import {
   faCheck,
   faFolder,
 } from "@fortawesome/free-solid-svg-icons";
-import AddProject from "../components/AddProject";
+import { authControll } from "../utils/dataOperations";
+import AddProject from "../components/constants/AddProject";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -106,24 +105,7 @@ const Dashboard = () => {
   ];
 
   useEffect(() => {
-    const token = Cookies.get("token");
-
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    try {
-      const user = jwtDecode(token);
-      if (!user) {
-        Cookies.remove("token");
-        navigate("/login");
-      }
-    } catch (error) {
-      console.error("Invalid token:", error);
-      Cookies.remove("token");
-      navigate("/login");
-    }
+    authControll();
   }, [navigate]);
 
   return (
@@ -149,7 +131,7 @@ const Dashboard = () => {
         ))}
       </div>
       <div className="flex mt-2 space-x-4">
-        <AddProject />
+        <AddProject onClick={""} />
         <div className="dashboard_box">
           <p className="mb-3">My Tasks</p>
           {taskdata.map(

@@ -1,10 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import Signup from "./Signup";
+import Login from "./Login";
 
 const Landing = () => {
+  const [showForm, setShowForm] = useState<"signup" | "login" | "none">("none");
+
   const navigate = useNavigate();
 
   const Images = [
@@ -36,10 +40,16 @@ const Landing = () => {
             </a>
           </div>
           <div className="flex space-x-12 mt-6 mr-10">
-            <a href="\login" className="basic_btn1 text-white">
+            <a
+              className="basic_btn1 text-white"
+              onClick={() => setShowForm("login")}
+            >
               Login
             </a>
-            <a href="\signup" className="basic_btn2 text-white">
+            <a
+              className="basic_btn2 text-white"
+              onClick={() => setShowForm("signup")}
+            >
               Sign Up
             </a>
           </div>
@@ -51,37 +61,46 @@ const Landing = () => {
             <img src={image.src} alt="image" className={image.className} />
           ))}
         </div>
+        {showForm === "none" ? (
+          <div className="absolute m-6 top-[30%] left-[5%] w-[60%] text-white">
+            <div className="title_container mb-8">
+              <span className="text-style">Task-Manager</span>
+            </div>
 
-        <div className="absolute m-6 top-[30%] left-[5%] text-white">
-          <div className="title_container mb-8">
-            <span className="text-style">Task-</span>
-            <span className="text-style">Manager</span>
+            <div className="font-extralight tracking-widest pl-2">
+              <p className="subtext">
+                Manage your tasks efficiently and effectively.
+              </p>
+              <p className="subtext">
+                Collaborate with your team and stay on track.
+              </p>
+              <p className="subtext">
+                Get real-time updates and notifications.
+              </p>
+              <p className="subtext">
+                Optimize your workflow and increase productivity.
+              </p>
+              <p className="subtext">
+                Track your progress and achieve your goals.
+              </p>
+            </div>
+            <div className="bg-neutral-400  mt-24">
+              <a
+                className="get_started swipe_btn w-[45%] absolute bottom-6 text-white ml-[-5%] mt-3 p-4"
+                onClick={() => setShowForm("signup")}
+              >
+                Swipe to get Started
+                <div className="arrow">
+                  <FontAwesomeIcon icon={faArrowRight} className="icon_color" />
+                </div>
+              </a>
+            </div>
           </div>
-          <div className="font-extralight tracking-widest pl-2">
-            <p className="subtext">
-              Manage your tasks efficiently and effectively.
-            </p>
-            <p className="subtext">
-              Collaborate with your team and stay on track.
-            </p>
-            <p className="subtext">Get real-time updates and notifications.</p>
-            <p className="subtext">
-              Optimize your workflow and increase productivity.
-            </p>
-            <p className="subtext">
-              Track your progress and achieve your goals.
-            </p>
-          </div>
-        </div>
-        <a
-          href="\signup"
-          className="get_started swipe_btn absolute bottom-6 text-white ml-4 mt-3 p-4"
-        >
-          Swipe to get Started
-          <div className="arrow">
-            <FontAwesomeIcon icon={faArrowRight} className="icon_color" />
-          </div>
-        </a>
+        ) : showForm === "signup" ? (
+          <Signup />
+        ) : (
+          <Login />
+        )}
       </div>
     </div>
   );

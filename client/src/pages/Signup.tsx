@@ -47,46 +47,58 @@ const Signup = () => {
   }, [navigate]);
 
   return (
-    <div>
-      <h1>Sign UP</h1>
-      <form onSubmit={registerUser}>
+    <div className="absolute m-6 top-[20%] left-[5%] text-white flex flex-col">
+      <div className="title_container mb-3">
+        <span className="text-style">SignUp</span>
+      </div>
+      <form onSubmit={registerUser} className="flex flex-col">
         <input
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
           type="text"
           placeholder="First Name"
+          className="input-style-1"
         />
         <input
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
           type="text"
           placeholder="Last Name"
+          className="input-style-1"
         />
         <input
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           type="text"
           placeholder="Username"
+          className="input-style-1"
         />
         <input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           type="email"
           placeholder="Email"
+          className="input-style-1"
         />
         <input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           type="password"
           placeholder="Password"
+          className="input-style-1"
         />
         <input
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           type="password"
           placeholder="Confirm Password"
+          className="input-style-1"
         />
-        <input type="submit" value="Sign Up" />
+        <input
+          type="submit"
+          value="Sign Up"
+          className="rounded-[5px] p-1 hover:bg-neutral-900"
+        />
       </form>
     </div>
   );

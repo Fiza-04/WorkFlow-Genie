@@ -49,7 +49,7 @@ const Sidebar = () => {
 
       if (data.status === "ok") {
         Cookies.remove("token");
-        navigate("/login");
+        navigate("/");
       } else {
         console.error("Failed to log out:", data.message);
       }

@@ -7,7 +7,15 @@ export function dateFormat(isoDate) {
   const month = parts[1];
   const day = parts[2];
 
-  return `${day}-${month}-${year}`;
+  const targetDate = new Date(year, month - 1, day);
+  const currentDate = new Date();
+  const difference = targetDate.getTime() - currentDate.getTime();
+
+  const daysRemaining = Math.ceil(difference / (1000 * 60 * 60 * 24));
+
+  const formattedDate = `${day}-${month}-${year}`;
+
+  return { formattedDate: formattedDate, remainingDays: daysRemaining };
 }
 
 export async function authControll(navigate, flag = false) {
@@ -15,7 +23,7 @@ export async function authControll(navigate, flag = false) {
   console.log("token => ", token);
 
   if (!token) {
-    navigate("/login");
+    navigate("/");
     return;
   }
 
@@ -23,7 +31,7 @@ export async function authControll(navigate, flag = false) {
     const user = jwtDecode(token);
     if (!user) {
       Cookies.remove("token");
-      navigate("/login");
+      navigate("/");
     }
 
     if (flag) {
@@ -39,14 +47,14 @@ export async function authControll(navigate, flag = false) {
       } catch (error) {
         console.error("Failed to fetch user ID:", error);
         Cookies.remove("token");
-        navigate("/login");
+        navigate("/");
       }
     }
     return user;
   } catch (error) {
     console.error("Invalid token:", error);
     Cookies.remove("token");
-    navigate("/login");
+    navigate("/");
   }
 }
 

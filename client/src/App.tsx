@@ -3,10 +3,9 @@ import Cookies from "js-cookie";
 import { Routes, Route, useLocation, Navigate, Outlet } from "react-router-dom";
 import {
   Landing,
-  Signup,
-  Login,
   Dashboard,
   Projects,
+  ProjectDashboard,
   Profile,
   Trash,
   Settings,
@@ -28,18 +27,17 @@ const App: React.FC = () => {
         </div>
       </div>
     ) : (
-      <Navigate to="/login" state={{ from: location }} replace />
+      <Navigate to="/" state={{ from: location }} replace />
     );
   }
 
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
       <Route element={<Layout />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/projects" element={<Projects />} />
+        <Route path="/project-dashboard" element={<ProjectDashboard />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/dump" element={<Trash />} />

@@ -35,7 +35,7 @@
 
 @layer components {
   .logo {
-    @apply h-36 w-36 mt-0 ml-6 rounded-[20px] flex justify-center items-center;
+    @apply h-28 w-28 mt-0 ml-6 rounded-[20px] flex justify-center items-center;
   }
 
   .logo-text {
@@ -68,6 +68,9 @@
 
   .input-style {
     @apply bg-neutral-900 border rounded-[10px] h-11 p-2;
+  }
+  .input-style-1 {
+    @apply bg-black border rounded-[10px] h-11 p-2 mb-4;
   }
 }
 
@@ -260,6 +263,12 @@
 
 .scrollable-div {
   height: calc(90vh - 4rem);
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollable-div-2 {
+  height: calc(50vh - 4rem);
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;

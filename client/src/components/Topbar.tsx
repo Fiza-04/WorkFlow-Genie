@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 
 const Topbar = () => {
   const location = useLocation();
+  const { project } = location.state || {};
 
   const getHeading = () => {
     switch (location.pathname) {
@@ -13,6 +14,8 @@ const Topbar = () => {
         return "Profile";
       case "/projects":
         return "Projects";
+      case "/project-dashboard":
+        return project ? `${project.title}` : "Project Dashboard";
       case "/dump":
         return "Trash";
       default:

@@ -1,8 +1,11 @@
 import { dateFormat } from "../../utils/dataOperations";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExpand, faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const ProjectCard = ({ project }) => {
+  const navigate = useNavigate();
+
   const priority = () => {
     if (project.stage !== "completed") {
       switch (project.priority) {
@@ -17,6 +20,12 @@ const ProjectCard = ({ project }) => {
       return "bg-green-700";
     }
   };
+
+  const handleExpand = () => {
+    // Navigate to the project dashboard page with project details as state
+    navigate(`/project-dashboard`, { state: { project } });
+  };
+
   return (
     <div
       key={project._id}
@@ -26,7 +35,7 @@ const ProjectCard = ({ project }) => {
         {project.title}
       </p>
       <p className="text-[14px] overflow-hidden whitespace-nowrap overflow-ellipsis">
-        {dateFormat(project.eod)}
+        {dateFormat(project.eod).formattedDate}
       </p>
       <p className="font-light text-[15px] overflow-hidden whitespace-nowrap overflow-ellipsis">
         {project.desc}
@@ -45,6 +54,7 @@ const ProjectCard = ({ project }) => {
         <FontAwesomeIcon
           icon={faExpand}
           className="cursor-pointer p-2 hover:bg-neutral-800"
+          onClick={handleExpand}
         />
         <FontAwesomeIcon
           icon={faTrash}

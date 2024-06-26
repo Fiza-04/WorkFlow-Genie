@@ -51,7 +51,7 @@ const getProject = async (req, res) => {
 const getAllProjects = async (req, res) => {
   try {
     const { stage, isTrashed, priority } = req.query;
-    const userId = req.params;
+    const { userId } = req.params;
 
     let query = {
       isTrashed: isTrashed === "true",
@@ -70,7 +70,7 @@ const getAllProjects = async (req, res) => {
 
     queryResult = queryResult.populate({
       path: "createdBy team",
-      select: "username",
+      select: "username, email",
     });
 
     const projects = await queryResult;

@@ -70,7 +70,7 @@ const getAllProjects = async (req, res) => {
 
     queryResult = queryResult.populate({
       path: "createdBy team",
-      select: "username, email",
+      select: "username email",
     });
 
     const projects = await queryResult;

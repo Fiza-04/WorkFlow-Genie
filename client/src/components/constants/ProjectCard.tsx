@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const ProjectCard = ({ project }) => {
   const navigate = useNavigate();
 
+  console.log(project);
   const priority = () => {
     if (project.stage !== "completed") {
       switch (project.priority) {

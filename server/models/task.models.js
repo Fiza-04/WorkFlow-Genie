@@ -9,7 +9,7 @@ const TaskSchema = new Schema(
     taskPriority: {
       type: String,
       default: "normal",
-      enum: ["low", "normal", "medium", "high"],
+      enum: ["normal", "medium", "high"],
       required: true,
     },
     taskStage: {

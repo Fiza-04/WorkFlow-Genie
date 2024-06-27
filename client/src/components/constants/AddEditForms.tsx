@@ -53,7 +53,7 @@ const AddEditForms = ({ onClick }) => {
   const addProject = async (event) => {
     event.preventDefault();
     const team = [...teamIds, userId];
-    console.log(team);
+
     const response = await fetch("http://localhost:3000/api/new-project", {
       method: "POST",
       headers: {

@@ -267,6 +267,10 @@
   box-shadow: inset 7px 7px 7px #e5b6b6, inset -10px -10px 7px #ffdede;
 }
 
+.red_shadow_btn {
+  box-shadow: inset 3px 3px 7px #8b1818, inset -3px -3px 7px #ff3434;
+}
+
 .scrollable-div {
   height: calc(90vh - 4rem);
   overflow-y: auto;
@@ -282,6 +286,20 @@
 
 .scrollable-div-3 {
   height: calc(29vh - 4rem);
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollable-div-4 {
+  height: calc(83vh - 4rem);
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollable-div-5 {
+  height: calc(70vh - 4rem);
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;

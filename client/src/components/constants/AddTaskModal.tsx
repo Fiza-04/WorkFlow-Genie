@@ -10,8 +10,8 @@ const AddTaskModal = ({ onClick, project }) => {
   const navigate = useNavigate();
   const [taskTitle, setTaskTitle] = useState("");
   const [taskEod, setTaskEod] = useState("");
-  const [taskPriority, setTaskPriority] = useState("");
-  const [taskStage, setTaskStage] = useState("");
+  const [taskPriority, setTaskPriority] = useState("normal");
+  const [taskStage, setTaskStage] = useState("pending");
   const [taskDesc, setTaskDesc] = useState("");
   const [assignedTo, setAssignedTo] = useState("");
   const [userId, setUserId] = useState(null);
@@ -32,8 +32,7 @@ const AddTaskModal = ({ onClick, project }) => {
 
   const addTask = async (event) => {
     event.preventDefault();
-
-    const response = await fetch("http://localhost:/3000/api/task/new-task", {
+    const response = await fetch("http://localhost:3000/api/task/new-task", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -53,13 +52,17 @@ const AddTaskModal = ({ onClick, project }) => {
 
     const data = await response.json();
 
+    console.log(data);
+
     if (data.status) {
       alert("Task Added Successfully");
       onClick(onClick);
     } else {
-      alert("Error adding project");
+      alert("Error adding project => ");
     }
   };
+
+  const today = new Date().toISOString().split("T")[0];
 
   const handlePriorityChange = (event) => {
     setTaskPriority(event.target.value);
@@ -93,6 +96,7 @@ const AddTaskModal = ({ onClick, project }) => {
               type="text"
               placeholder="Task Name"
               className="input-style text-sm"
+              required
             />
           </div>
           <div className="flex flex-row space-x-10  mb-5">
@@ -104,6 +108,8 @@ const AddTaskModal = ({ onClick, project }) => {
                 type="date"
                 placeholder="End Date"
                 className="input-style w-40"
+                min={today}
+                required
               />
             </div>
             <div className="flex flex-col space-y-1">
@@ -147,9 +153,10 @@ const AddTaskModal = ({ onClick, project }) => {
               value={assignedTo}
               onChange={handleAssignedTo}
               className="input-style  w-40"
+              required
             >
               <option value=""></option>
-              {project.map((member) => (
+              {project.team.map((member) => (
                 <option value={`${member._id}`}>{member.username}</option>
               ))}
             </select>

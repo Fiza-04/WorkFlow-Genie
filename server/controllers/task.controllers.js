@@ -53,47 +53,13 @@ const newTask = async (req, res) => {
   }
 };
 
-// const duplicateTask = async (req, res) => {
-//   try {
-//     console.log("here");
-//     const { id } = req.params;
-//     const task = await Task.findById(id);
-
-//     console.log(task);
-
-//     const newTaskData = {
-//       ...task.toObject(),
-//       _id: undefined,
-//       taskTitle: `${task.taskTitle} - Copy`,
-//       project: task.project._id,
-//     };
-
-//     const newTask = new Task(newTaskData);
-//     await newTask.save();
-
-//     const project = await Project.findById(task.project._id);
-//     project.tasks.push(newTask._id);
-//     await project.save();
-
-//     res
-//       .status(201)
-//       .json({ status: true, message: "Task duplicated successfully." });
-//   } catch (error) {
-//     return res.status(400).json({ status: false, message: error.message });
-//   }
-// };
-
 const getTask = async (req, res) => {
   try {
     const { id } = req.params;
     const task = await Task.findById(id)
       .populate({
-        path: "assignedTo",
+        path: "assignedTo assignedBy",
         select: "name",
-      })
-      .populate({
-        path: "assignedBy",
-        select: "name,",
       })
       .sort({ _id: -1 });
 
@@ -120,7 +86,7 @@ const getTasks = async (req, res) => {
 
     const tasks = await Task.find({ project: projectId }).populate({
       path: "assignedTo assignedBy taskCreatedBy",
-      select: "name email",
+      select: "username email",
     });
 
     if (tasks.length === 0) {
@@ -168,7 +134,10 @@ const taskCount = async (req, res) => {
       taskStage: "completed",
     });
 
+    const all = pending + progress + completed;
+
     let taskCounts = {
+      all: all,
       pending: pending,
       inProgress: progress,
       completed: completed,

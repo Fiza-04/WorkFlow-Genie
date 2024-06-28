@@ -69,7 +69,8 @@ export async function fetchTaskCounts(projectId) {
     }
 
     const result = await response.json();
-    return result;
+    console.log(result.count);
+    return result.count;
   } catch (error) {
     console.error("Error fetching task counts:", error);
   }

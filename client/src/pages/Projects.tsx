@@ -11,12 +11,11 @@ const Projects = () => {
 
   const [projectData, setProjectData] = useState([]);
   const [userId, setUserId] = useState(null);
-  // const [taskCounts, setTaskCounts] = useState({});
   const [visibility, setVisibility] = useState(false);
 
   const data = [
-    { title: "All", count: "0", color: "bg-purple-300 purple_shadow" },
-    { title: "Pending", count: "0", color: "bg-red-200 red_shadow" },
+    { title: "All", count: "0", color: "bg-purple-500 purple_shadow" },
+    { title: "Pending", count: "0", color: "bg-red-500 red_shadow_2" },
     { title: "In-progress", count: "0", color: "bg-yellow-200 yellow_shadow" },
     { title: "Completed", count: "0", color: "bg-green-300 green_shadow" },
   ];
@@ -42,14 +41,12 @@ const Projects = () => {
   const getProjectData = async () => {
     try {
       const response = await fetch(`http://localhost:3000/api/all/${userId}`);
-      console.log("userIduserId => ", userId);
-      console.log("userid => ", response);
+
       if (!response.ok) {
         throw new Error("Data not fetched");
       }
 
       const result = await response.json();
-      console.log(result.projects);
       setProjectData(result.projects || []);
     } catch (error) {
       console.log(error);

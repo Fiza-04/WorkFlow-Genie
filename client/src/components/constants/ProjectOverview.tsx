@@ -4,26 +4,19 @@ import {
   faCheck,
   faListCheck,
   faUser,
-  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useLocation } from "react-router-dom";
 import { dateFormat } from "../../utils/dataOperations";
 import { Tooltip } from "react-tooltip";
-import { useState } from "react";
-import AddTaskModal from "./AddTaskModal";
+import TaskCount from "./TaskCount";
+// import AddTaskButton from "./AddTaskButton";
 
 const ProjectOverview = () => {
   const location = useLocation();
   const { project } = location.state;
-  const [showTaskModal, setShowTaskModal] = useState(false);
 
-  const taskData = [
-    { title: "ALL", count: "0", color: "bg-purple-500 purple_shadow" },
-    { title: "PENDING", count: "0", color: "bg-red-500 red_shadow_2" },
-    { title: "IN-PROGRESS", count: "0", color: "bg-yellow-700 yellow_shadow" },
-    { title: "COMPLETED", count: "0", color: "bg-green-500 green_shadow" },
-  ];
+  console.log("project => ", project);
 
   const priority = () => {
     switch (project.priority) {
@@ -51,17 +44,19 @@ const ProjectOverview = () => {
     }
   };
 
-  const closeModal = () => {
-    setShowTaskModal(false);
-  };
-
   return (
     <div>
       <div className="flex flex-row">
         <div className="w-[50%]  scrollable-div-2">
-          <p className="text-neutral-400 font-light text-justify">
-            {project.desc}
-          </p>
+          {project.desc === "" ? (
+            <p className="flex justify-center items-center h-44 text-xl text-neutral-600">
+              No Description Found :(
+            </p>
+          ) : (
+            <p className="text-neutral-400 font-light text-justify">
+              {project.desc}
+            </p>
+          )}
         </div>
         <div className="ml-12 h-28 w-[50%]">
           <div className="ml-2 flex flex-row  space-x-16">
@@ -138,17 +133,8 @@ const ProjectOverview = () => {
         </div>
       </div>
       <div className="flex flex-row">
-        <div className="rounded-[20px] ml-[-2%] w-[48%] mt-7 h-40 flex flex-row justify-center items-center space-x-12">
-          {taskData.map((data) => (
-            <div className="flex flex-col items-center">
-              <p
-                className={`${data.color} p-7 pl-9 pr-9 mb-2 rounded-[20px] text-3xl`}
-              >
-                {data.count}
-              </p>
-              <p className="text-neutral-400">{data.title}</p>
-            </div>
-          ))}
+        <div className="rounded-[20px] ml-[-2%] w-[48%] mt-7 h-40">
+          <TaskCount flag="overview" project={project._id} />
         </div>
         <div className="icon-shadow rounded-[20px] mt-0 ml-9 w-[52%] h-64  flex justify-center items-center">
           {project.tasks.length > 0 ? (
@@ -160,22 +146,12 @@ const ProjectOverview = () => {
                 <p className="font-semibold text-xl text-neutral-500">
                   No Tasks Found!!
                 </p>
-                <a
-                  onClick={() => setShowTaskModal(true)}
-                  className="mt-1 text-neutral-400 cursor-pointer hover:bg-neutral-900 p-2 w-[70%] rounded-[10px] hover:text-neutral-100 glow-effect"
-                >
-                  <FontAwesomeIcon icon={faPlus} /> Add Task
-                </a>
+                {/* <AddTaskButton project={project} /> */}
               </div>
             </div>
           )}
         </div>
       </div>
-      {showTaskModal ? (
-        <AddTaskModal onClick={closeModal} project={project.team} />
-      ) : (
-        ""
-      )}
     </div>
   );
 };

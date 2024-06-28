@@ -18,7 +18,7 @@ router.post("/new-task", newTask);
 
 // router.get("/", getAllTasks);
 router.get("/:id", getTask);
-router.get("/project/:id", getTasks);
+router.get("/project/:projectId", getTasks);
 router.get("/count/:projectId", taskCount);
 
 router.put("/update/:id", updateTask);

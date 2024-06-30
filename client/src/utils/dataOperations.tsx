@@ -25,7 +25,6 @@ export function dateFormat(isoDate) {
 
 export async function authControll(navigate, flag = false) {
   const token = Cookies.get("token");
-  console.log("token => ", token);
 
   if (!token) {
     navigate("/");

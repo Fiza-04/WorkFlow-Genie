@@ -3,7 +3,7 @@ import { dateFormat } from "../../utils/dataOperations";
 import ViewTaskModal from "./ViewTaskModal";
 import { CrudButtons } from "./Buttons";
 
-const TaskCard = ({ task, loadData, project }) => {
+const TaskCard = ({ task, loadData, project, userId }) => {
   const [showView, setShowView] = useState(false);
 
   const trashTask = async () => {
@@ -66,6 +66,9 @@ const TaskCard = ({ task, loadData, project }) => {
     setShowView(false);
   };
 
+  const isCreatorOrAssigned =
+    userId === project.createdBy._id || userId === task.assignedTo._id;
+
   return (
     <>
       <div
@@ -101,6 +104,7 @@ const TaskCard = ({ task, loadData, project }) => {
           project={project}
           loadData={loadData}
           item_id={task._id}
+          isCreator={isCreatorOrAssigned}
         />
       </div>
       {showView && <ViewTaskModal task={task} onClick={closeModal} />}

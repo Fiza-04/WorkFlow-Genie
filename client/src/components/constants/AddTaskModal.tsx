@@ -88,8 +88,6 @@ const AddTaskModal = ({ onClick, project, flag = "add", existingTask }) => {
 
     const data = await response.json();
 
-    console.log(data);
-
     if (data.status) {
       alert(
         flag === "edit"

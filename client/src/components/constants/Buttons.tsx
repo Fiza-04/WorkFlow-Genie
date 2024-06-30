@@ -11,6 +11,7 @@ const CrudButtons = ({
   project,
   loadData,
   item_id,
+  isCreator,
 }) => {
   const [showTaskEdit, setShowTaskEdit] = useState(false);
   const [showProjectEdit, setShowProjectEdit] = useState(false);
@@ -34,37 +35,41 @@ const CrudButtons = ({
         className="cursor-pointer p-2 hover:bg-neutral-800"
         onClick={onExpand}
       />
-      <FontAwesomeIcon
-        icon={faPen}
-        className="cursor-pointer p-2 hover:bg-neutral-800"
-        onClick={() => {
-          if (type === "project") {
-            setShowProjectEdit(true);
-          } else if (type === "task") {
-            setShowTaskEdit(true);
-          }
-        }}
-      />
-      {type === "project" && showProjectEdit && (
-        <AddEditForms
-          onClick={closeModal}
-          flag="edit"
-          existingProject={project}
-        />
+      {isCreator && (
+        <>
+          <FontAwesomeIcon
+            icon={faPen}
+            className="cursor-pointer p-2 hover:bg-neutral-800"
+            onClick={() => {
+              if (type === "project") {
+                setShowProjectEdit(true);
+              } else if (type === "task") {
+                setShowTaskEdit(true);
+              }
+            }}
+          />
+          {type === "project" && showProjectEdit && (
+            <AddEditForms
+              onClick={closeModal}
+              flag="edit"
+              existingProject={project}
+            />
+          )}
+          {type === "task" && showTaskEdit && (
+            <AddTaskModal
+              onClick={closeModal}
+              project={project}
+              flag="edit"
+              existingTask={item_id}
+            />
+          )}
+          <FontAwesomeIcon
+            icon={faTrash}
+            className="cursor-pointer p-2 hover:bg-neutral-800"
+            onClick={onTrash}
+          />
+        </>
       )}
-      {type === "task" && showTaskEdit && (
-        <AddTaskModal
-          onClick={closeModal}
-          project={project}
-          flag="edit"
-          existingTask={item_id}
-        />
-      )}
-      <FontAwesomeIcon
-        icon={faTrash}
-        className="cursor-pointer p-2 hover:bg-neutral-800"
-        onClick={onTrash}
-      />
     </p>
   );
 };

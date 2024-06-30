@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { dateFormat } from "../../utils/dataOperations";
 import { useNavigate } from "react-router-dom";
 import { CrudButtons } from "./Buttons";
 
-const ProjectCard = ({ project, loadData }) => {
+const ProjectCard = ({ project, loadData, userId }) => {
   const navigate = useNavigate();
 
   const trashProject = async () => {
@@ -46,7 +47,7 @@ const ProjectCard = ({ project, loadData }) => {
   };
 
   const handleExpand = () => {
-    navigate(`/project-dashboard`, { state: { project } });
+    navigate(`/project-dashboard`, { state: { project, userId } });
   };
 
   const handleTrashProject = async () => {
@@ -89,13 +90,12 @@ const ProjectCard = ({ project, loadData }) => {
       </div>
       <CrudButtons
         type="project"
-        onExpand={() => handleExpand()}
-        onTrash={() => {
-          handleTrashProject();
-        }}
+        onExpand={handleExpand}
+        onTrash={handleTrashProject}
         project={project}
         loadData={loadData}
         item_id={project._id}
+        isCreator={userId === project.createdBy._id}
       />
     </div>
   );

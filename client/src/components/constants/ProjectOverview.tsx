@@ -10,13 +10,10 @@ import { useLocation } from "react-router-dom";
 import { dateFormat } from "../../utils/dataOperations";
 import { Tooltip } from "react-tooltip";
 import TaskCount from "./TaskCount";
-// import AddTaskButton from "./AddTaskButton";
 
 const ProjectOverview = () => {
   const location = useLocation();
   const { project } = location.state;
-
-  console.log("project => ", project);
 
   const priority = () => {
     switch (project.priority) {

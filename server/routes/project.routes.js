@@ -5,6 +5,7 @@ const {
   getProject,
   updateProject,
   trashProject,
+  getAllTrashedProjects,
   deleteRestoreProject,
 } = require("../controllers/project.controllers.js");
 
@@ -14,6 +15,7 @@ router.post("/new-project", newProject);
 
 router.get("/all/:userId", getAllProjects);
 router.get("/:id", getProject);
+router.get("/trashed/:userId", getAllTrashedProjects);
 
 router.put("/update/:id", updateProject);
 router.put("/trash/:id", trashProject);

@@ -177,40 +177,54 @@ const trashProject = async (req, res) => {
   }
 };
 
+const getAllTrashedProjects = async (req, res) => {
+  try {
+    const { isTrashed } = req.query;
+    const { userId } = req.params;
+
+    let query = {
+      isTrashed: isTrashed === "true",
+      $or: [{ createdBy: userId }, { team: userId }],
+    };
+
+    let queryResult = Project.find(query);
+
+    queryResult = queryResult.populate({
+      path: "createdBy team",
+      select: "username email",
+    });
+
+    const projects = await queryResult;
+
+    res.status(200).json({ status: true, projects });
+  } catch (error) {
+    return res.status(400).json({ status: false, message: error.message });
+  }
+};
+
 const deleteRestoreProject = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user._id;
     const { action } = req.query;
-    const project = Project.findById(id);
-    if (project.createdBy.toString() !== userId.toString()) {
-      let message = "";
-      if (action === "delete") {
-        await Project.findByIdAndDelete(id);
-        message = "Project deleted successfully!";
-      } else if (action === "deleteAll") {
-        await Project.deleteMany(
-          { isTrashed: false },
-          { $set: { isTrashed: true } }
-        );
-        message = "All projects deleted successfully!";
-      } else if (action === "restore") {
-        const resp = await Project.findById(id);
-        resp.isTrashed = false;
-        resp.save();
-        message = "Project restored successfully!";
-      } else if (action === "restoreAll") {
-        await Project.updateMany(
-          { isTrashed: true },
-          { $set: { isTrashed: false } }
-        );
-        message = "All projects restored successfully!";
-      }
-    } else {
-      res.status(400).json({
-        status: false,
-        message: "You are not authorised to perform this action",
-      });
+
+    let message = "";
+    if (action === "delete") {
+      await Project.findByIdAndDelete(id);
+      message = "Project deleted successfully!";
+    } else if (action === "deleteAll") {
+      await Project.deleteMany({ isTrashed: true });
+      message = "All projects deleted successfully!";
+    } else if (action === "restore") {
+      const resp = await Project.findById(id);
+      resp.isTrashed = false;
+      resp.save();
+      message = "Project restored successfully!";
+    } else if (action === "restoreAll") {
+      await Project.updateMany(
+        { isTrashed: true },
+        { $set: { isTrashed: false } }
+      );
+      message = "All projects restored successfully!";
     }
 
     res.status(200).json({ status: true, message: message });
@@ -225,5 +239,6 @@ module.exports = {
   getAllProjects,
   updateProject,
   trashProject,
+  getAllTrashedProjects,
   deleteRestoreProject,
 };

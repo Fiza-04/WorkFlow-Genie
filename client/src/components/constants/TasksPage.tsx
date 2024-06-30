@@ -7,7 +7,7 @@ import AddTaskButton from "./AddTaskButton";
 const TasksPage = () => {
   const hasFetchedData = useRef(false);
   const location = useLocation();
-  const { project } = location.state;
+  const { project, userId } = location.state;
   const [taskData, setTaskData] = useState([]);
 
   const getTaskData = async () => {
@@ -64,6 +64,7 @@ const TasksPage = () => {
                 project={project}
                 task={task}
                 loadData={handleTask}
+                userId={userId}
               />
             ))
           ) : (

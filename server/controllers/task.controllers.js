@@ -215,38 +215,6 @@ const trashTask = async (req, res) => {
   }
 };
 
-const deleteRestoreTask = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { action } = req.query;
-    let message = "";
-    if (action === "delete") {
-      await Task.findByIdAndDelete(id);
-      message = "Task deleted successfully!";
-    } else if (action === "deleteAll") {
-      await Task.deleteMany(
-        { taskIsTrashed: false },
-        { $set: { taskIsTrashed: true } }
-      );
-      message = "All tasks deleted successfully!";
-    } else if (action === "restore") {
-      const resp = await Task.findById(id);
-      resp.taskIsTrashed = false;
-      resp.save();
-      message = "Task restored successfully!";
-    } else if (action === "restoreAll") {
-      await Task.updateMany(
-        { taskIsTrashed: true },
-        { $set: { taskIsTrashed: false } }
-      );
-      message = "All task restored successfully!";
-    }
-    res.status(200).json({ status: true, message: message });
-  } catch (error) {
-    return res.status(400).json({ status: false, message: error.message });
-  }
-};
-
 module.exports = {
   newTask,
   // duplicateTask,
@@ -256,5 +224,4 @@ module.exports = {
   taskCount,
   updateTask,
   trashTask,
-  deleteRestoreTask,
 };

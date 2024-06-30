@@ -134,6 +134,7 @@ const Projects = () => {
                   key={project._id}
                   project={project}
                   loadData={() => handleProject()}
+                  userId={userId}
                 />
               ))
             ) : (

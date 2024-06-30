@@ -16,7 +16,7 @@ router.get("/all/:userId", getAllProjects);
 router.get("/:id", getProject);
 
 router.put("/update/:id", updateProject);
-router.put("/:id", trashProject);
+router.put("/trash/:id", trashProject);
 
 router.delete("/delete-restore/:id?", deleteRestoreProject);
 

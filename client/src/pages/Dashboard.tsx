@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -14,52 +14,13 @@ import AddProject from "../components/constants/AddProject";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const cardDetails = [
-    {
-      title: "Pending",
-      color: "bg-red-200",
-      data: "0",
-      type: "Project",
-      icon: faSpinner,
-    },
-    {
-      title: "Inprogress",
-      color: "bg-yellow-200",
-      data: "0",
-      type: "Project",
-      icon: faListCheck,
-    },
-    {
-      title: "Completed",
-      color: "bg-green-200",
-      data: "0",
-      type: "Project",
-      icon: faCheck,
-    },
-    {
-      title: "Pending",
-      color: "bg-red-200",
-      data: "0",
-      type: "Tasks",
-      icon: faSpinner,
-    },
-    {
-      title: "Inprogress",
-      color: "bg-yellow-200",
-      data: "0",
-      type: "Tasks",
-      icon: faListCheck,
-    },
-    {
-      title: "Completed",
-      color: "bg-green-200",
-      data: "0",
-      type: "Tasks",
-      icon: faCheck,
-    },
-  ];
+  const [projectCounts, setProjectCounts] = useState({
+    pending: 0,
+    inProgress: 0,
+    completed: 0,
+  });
 
-  const taskdata = [
+  const [taskdata, setTaskdata] = useState([
     {
       type: "task",
       title: "Add functions to UI",
@@ -102,10 +63,86 @@ const Dashboard = () => {
       endDate: "10 June 2024",
       priority: "low",
     },
+  ]);
+
+  const handleBtn = () => {
+    navigate("/projects");
+  };
+
+  const fetchProjectData = async () => {
+    const user = await authControll(navigate, true);
+    if (user) {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/all/${user.userId}`
+        );
+        if (!response.ok) {
+          throw new Error("Data not fetched");
+        }
+        const result = await response.json();
+        setProjectCounts({
+          pending: result.count.pending,
+          inProgress: result.count.inProgress,
+          completed: result.count.completed,
+        });
+      } catch (error) {
+        console.log(error);
+        setProjectCounts({ pending: 0, inProgress: 0, completed: 0 });
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchProjectData();
+  }, []);
+
+  const cardDetails = [
+    {
+      title: "Pending",
+      color: "bg-red-200",
+      data: projectCounts.pending,
+      type: "Projects",
+      icon: faSpinner,
+    },
+    {
+      title: "Inprogress",
+      color: "bg-yellow-200",
+      data: projectCounts.inProgress,
+      type: "Projects",
+      icon: faListCheck,
+    },
+    {
+      title: "Completed",
+      color: "bg-green-200",
+      data: projectCounts.completed,
+      type: "Projects",
+      icon: faCheck,
+    },
+    {
+      title: "Pending",
+      color: "bg-red-200",
+      data: "0",
+      type: "Tasks",
+      icon: faSpinner,
+    },
+    {
+      title: "Inprogress",
+      color: "bg-yellow-200",
+      data: "0",
+      type: "Tasks",
+      icon: faListCheck,
+    },
+    {
+      title: "Completed",
+      color: "bg-green-200",
+      data: "0",
+      type: "Tasks",
+      icon: faCheck,
+    },
   ];
 
   useEffect(() => {
-    authControll();
+    authControll(navigate, true);
   }, [navigate]);
 
   return (
@@ -131,13 +168,13 @@ const Dashboard = () => {
         ))}
       </div>
       <div className="flex mt-2 space-x-4">
-        <AddProject onClick={""} />
+        <AddProject onClick={handleBtn} text="goto" />
         <div className="dashboard_box">
           <p className="mb-3">My Tasks</p>
           {taskdata.map(
-            (item) =>
+            (item, index) =>
               item.type === "task" && (
-                <div className="mb-4 ml-1">
+                <div key={index} className="mb-4 ml-1">
                   <div className="flex items-center">
                     <FontAwesomeIcon icon={faListDots} className="mr-3" />
                     <div className="w-52">
@@ -177,9 +214,9 @@ const Dashboard = () => {
         <div className="dashboard_box">
           <p className="mb-3">My Projects</p>
           {taskdata.map(
-            (item) =>
+            (item, index) =>
               item.type === "projects" && (
-                <div className="mb-4 ml-1">
+                <div key={index} className="mb-4 ml-1">
                   <div className="flex items-center">
                     <FontAwesomeIcon icon={faFolder} className="mr-3" />
                     <div className="w-52">

@@ -22,7 +22,12 @@ const AddTaskButton = ({ project, onTaskAdded }) => {
         <FontAwesomeIcon icon={faPlus} /> Add Task
       </a>
       {showTaskModal ? (
-        <AddTaskModal onClick={() => closeTaskModal()} project={project} />
+        <AddTaskModal
+          onClick={() => closeTaskModal()}
+          project={project}
+          flag="add"
+          existingTask=""
+        />
       ) : (
         ""
       )}

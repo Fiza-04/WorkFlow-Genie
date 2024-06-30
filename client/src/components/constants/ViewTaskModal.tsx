@@ -91,7 +91,7 @@ const ViewTaskModal = ({ task, onClick }) => {
 
           <div className="mt-7">
             <p className="text-[12px]">Description:</p>
-            {task.taskDesc === null ? (
+            {task.taskDesc === "" ? (
               <div className="pt-2 font-thin text-[14px]">
                 No Description :(
               </div>

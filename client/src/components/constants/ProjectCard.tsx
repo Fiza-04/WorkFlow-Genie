@@ -1,12 +1,35 @@
 import { dateFormat } from "../../utils/dataOperations";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExpand, faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { CrudButtons } from "./Buttons";
 
-const ProjectCard = ({ project }) => {
+const ProjectCard = ({ project, loadData }) => {
   const navigate = useNavigate();
 
-  console.log(project);
+  const trashProject = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/trash/${project._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Error trashing Project");
+      }
+
+      console.log("Project trashed successfully:", data);
+      return data;
+    } catch (error) {
+      console.error("Error trashing project:", error);
+    }
+  };
+
   const priority = () => {
     if (project.stage !== "completed") {
       switch (project.priority) {
@@ -23,8 +46,21 @@ const ProjectCard = ({ project }) => {
   };
 
   const handleExpand = () => {
-    // Navigate to the project dashboard page with project details as state
     navigate(`/project-dashboard`, { state: { project } });
+  };
+
+  const handleTrashProject = async () => {
+    const userConfirmed = window.confirm(
+      "Are you sure you want to trash this project?"
+    );
+    if (userConfirmed) {
+      try {
+        await trashProject();
+        loadData();
+      } catch (error) {
+        alert("Failed to trash the project: " + error.message);
+      }
+    }
   };
 
   return (
@@ -51,21 +87,16 @@ const ProjectCard = ({ project }) => {
           {project.stage}
         </p>
       </div>
-      <p className="font-light text-[15px] flex items-center space-x-4">
-        <FontAwesomeIcon
-          icon={faExpand}
-          className="cursor-pointer p-2 hover:bg-neutral-800"
-          onClick={handleExpand}
-        />
-        <FontAwesomeIcon
-          icon={faTrash}
-          className="cursor-pointer p-2 hover:bg-neutral-800"
-        />
-        <FontAwesomeIcon
-          icon={faPen}
-          className="cursor-pointer p-2 hover:bg-neutral-800"
-        />
-      </p>
+      <CrudButtons
+        type="project"
+        onExpand={() => handleExpand()}
+        onTrash={() => {
+          handleTrashProject();
+        }}
+        project={project}
+        loadData={loadData}
+        item_id={project._id}
+      />
     </div>
   );
 };

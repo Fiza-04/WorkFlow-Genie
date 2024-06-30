@@ -9,16 +9,12 @@ const Projects = () => {
   const hasFetchedData = useRef(false);
   const navigate = useNavigate();
 
-  const [projectData, setProjectData] = useState([]);
+  const [projectData, setProjectData] = useState({
+    projects: [],
+    count: { all: 0, pending: 0, inProgress: 0, completed: 0 },
+  });
   const [userId, setUserId] = useState(null);
   const [visibility, setVisibility] = useState(false);
-
-  const data = [
-    { title: "All", count: "0", color: "bg-purple-500 purple_shadow" },
-    { title: "Pending", count: "0", color: "bg-red-500 red_shadow_2" },
-    { title: "In-progress", count: "0", color: "bg-yellow-200 yellow_shadow" },
-    { title: "Completed", count: "0", color: "bg-green-300 green_shadow" },
-  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,13 +27,6 @@ const Projects = () => {
     fetchData();
   }, [navigate]);
 
-  useEffect(() => {
-    if (userId && !hasFetchedData.current) {
-      getProjectData();
-      hasFetchedData.current = true;
-    }
-  }, [userId]);
-
   const getProjectData = async () => {
     try {
       const response = await fetch(`http://localhost:3000/api/all/${userId}`);
@@ -47,10 +36,13 @@ const Projects = () => {
       }
 
       const result = await response.json();
-      setProjectData(result.projects || []);
+      setProjectData(result);
     } catch (error) {
       console.log(error);
-      setProjectData([]);
+      setProjectData({
+        projects: [],
+        count: { all: 0, pending: 0, inProgress: 0, completed: 0 },
+      });
     }
   };
 
@@ -58,12 +50,46 @@ const Projects = () => {
     return setVisibility(true);
   };
 
+  const handleProject = () => {
+    getProjectData();
+  };
+
   const closeForm = (flag = false) => {
     if (flag) {
-      getProjectData();
+      handleProject();
     }
     return setVisibility(false);
   };
+
+  const data = [
+    {
+      title: "All",
+      count: `${projectData.count.all}`,
+      color: "bg-purple-500 purple_shadow",
+    },
+    {
+      title: "Pending",
+      count: `${projectData.count.pending}`,
+      color: "bg-red-500 red_shadow_2",
+    },
+    {
+      title: "In-progress",
+      count: `${projectData.count.inProgress}`,
+      color: "bg-yellow-200 yellow_shadow",
+    },
+    {
+      title: "Completed",
+      count: `${projectData.count.completed}`,
+      color: "bg-green-300 green_shadow",
+    },
+  ];
+
+  useEffect(() => {
+    if (userId && !hasFetchedData.current) {
+      handleProject();
+      hasFetchedData.current = true;
+    }
+  }, [userId]);
 
   return (
     <div className="flex w-[100%] h-[80%]">
@@ -83,20 +109,18 @@ const Projects = () => {
             ))}
           </div>
         </div>
-
         <div className="mt-4 ml-6 text-white">
           <AddProject onClick={openForm} />
         </div>
       </div>
-
       <div className="w-[73%]">
         {visibility ? (
           <div className="text-white scrollable-div">
-            <AddEditForms onClick={closeForm} />
+            <AddEditForms onClick={closeForm} flag="add" existingProject={""} />
           </div>
         ) : (
           <div className="scrollable-div">
-            <div className="bg-neutral-800 icon-shadow w-full grid grid-cols-6 gap-10 p-2 sticky top-0 z-10 text-neutral-400">
+            <div className="bg-neutral-800 icon-shadow w-full grid grid-cols-6 gap-10 p-2 sticky top-0 text-neutral-400">
               <p className="text-start">Title</p>
               <p className="text-start">Deadline</p>
               <p className="text-start">Description</p>
@@ -104,14 +128,12 @@ const Projects = () => {
               <p className="text-start">Status</p>
               <p className="text-start"></p>
             </div>
-
-            {projectData.length > 0 ? (
-              projectData.map((project) => (
+            {projectData.projects.length > 0 ? (
+              projectData.projects.map((project) => (
                 <ProjectCard
                   key={project._id}
                   project={project}
-                  // taskCounts={taskCounts[project._id]}
-                  // createdBy={usernames[project.createdBy]}
+                  loadData={() => handleProject()}
                 />
               ))
             ) : (

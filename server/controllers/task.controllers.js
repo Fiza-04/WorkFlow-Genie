@@ -1,5 +1,6 @@
 const Task = require("../models/task.models.js");
 const Project = require("../models/project.models.js");
+const User = require("../models/user.models.js");
 const mongoose = require("mongoose");
 
 const newTask = async (req, res) => {
@@ -39,8 +40,12 @@ const newTask = async (req, res) => {
         message: `Project not found for ID: ${projectId}`,
       });
     }
-
     await task.save();
+
+    await User.updateMany(
+      { _id: { $in: [taskCreatedBy, assignedTo, assignedBy] } },
+      { $push: { tasks: task._id } }
+    );
 
     project_data.tasks.push(task._id);
     await project_data.save();
@@ -58,8 +63,8 @@ const getTask = async (req, res) => {
     const { id } = req.params;
     const task = await Task.findById(id)
       .populate({
-        path: "assignedTo assignedBy",
-        select: "name",
+        path: "assignedTo assignedBy taskCreatedBy",
+        select: "username",
       })
       .sort({ _id: -1 });
 
@@ -84,10 +89,15 @@ const getTasks = async (req, res) => {
       });
     }
 
-    const tasks = await Task.find({ project: projectId }).populate({
-      path: "assignedTo assignedBy taskCreatedBy",
-      select: "username email",
-    });
+    const tasks = await Task.find({
+      project: projectId,
+      taskIsTrashed: false,
+    })
+      .sort({ taskEod: 1, taskPriority: 1 })
+      .populate({
+        path: "assignedTo assignedBy taskCreatedBy",
+        select: "username email",
+      });
 
     if (tasks.length === 0) {
       return res.status(404).json({
@@ -173,8 +183,6 @@ const updateTask = async (req, res) => {
       { new: true, runValidators: true }
     );
 
-    const query = { project: projectId };
-    const tasks = Task.find().project(query);
     if (!task) {
       return res.status(404).json({ status: false, message: "Task not found" });
     }

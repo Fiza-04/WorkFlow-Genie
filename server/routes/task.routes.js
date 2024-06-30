@@ -22,7 +22,7 @@ router.get("/project/:projectId", getTasks);
 router.get("/count/:projectId", taskCount);
 
 router.put("/update/:id", updateTask);
-router.put("/:id", trashTask);
+router.put("/trash/:id", trashTask);
 
 router.delete("/delete-restore/:id?", deleteRestoreTask);
 

@@ -14,8 +14,13 @@ export function dateFormat(isoDate) {
   const daysRemaining = Math.ceil(difference / (1000 * 60 * 60 * 24));
 
   const formattedDate = `${day}-${month}-${year}`;
+  const otherformattedDate = `${year}-${month}-${day}`;
 
-  return { formattedDate: formattedDate, remainingDays: daysRemaining };
+  return {
+    formattedDate: formattedDate,
+    remainingDays: daysRemaining,
+    otherformattedDate: otherformattedDate,
+  };
 }
 
 export async function authControll(navigate, flag = false) {

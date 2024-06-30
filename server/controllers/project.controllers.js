@@ -54,7 +54,7 @@ const getAllProjects = async (req, res) => {
     const { userId } = req.params;
 
     let query = {
-      isTrashed: isTrashed === "true",
+      isTrashed: isTrashed === "false",
       $or: [{ createdBy: userId }, { team: userId }],
     };
 
@@ -66,7 +66,7 @@ const getAllProjects = async (req, res) => {
       query.priority = priority;
     }
 
-    let queryResult = Project.find(query).sort({ _id: -1 });
+    let queryResult = Project.find(query).sort({ eod: 1, priority: 1 });
 
     queryResult = queryResult.populate({
       path: "createdBy team",
@@ -75,7 +75,32 @@ const getAllProjects = async (req, res) => {
 
     const projects = await queryResult;
 
-    res.status(200).json({ status: true, projects });
+    const pending = await Project.countDocuments({
+      stage: "pending",
+      isTrashed: false,
+      $or: [{ createdBy: userId }, { team: userId }],
+    });
+    const progress = await Project.countDocuments({
+      stage: "in-progress",
+      isTrashed: false,
+      $or: [{ createdBy: userId }, { team: userId }],
+    });
+    const completed = await Project.countDocuments({
+      stage: "completed",
+      isTrashed: false,
+      $or: [{ createdBy: userId }, { team: userId }],
+    });
+
+    const all = pending + progress + completed;
+
+    let projectCounts = {
+      all: all,
+      pending: pending,
+      inProgress: progress,
+      completed: completed,
+    };
+
+    res.status(200).json({ status: true, projects, count: projectCounts });
   } catch (error) {
     return res.status(400).json({ status: false, message: error.message });
   }
@@ -84,13 +109,20 @@ const getAllProjects = async (req, res) => {
 const updateProject = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user._id;
 
-    const project = await Project.findById(id);
-    let data = {};
+    data = {
+      title: req.body.title,
+      eod: req.body.eod,
+      desc: req.body.desc,
+      priority: req.body.priority,
+      team: req.body.team,
+      createdBy: req.body.createdBy,
+      isTrashed: req.body.isTrashed,
+    };
 
-    if (project.createdBy.toString() !== userId.toString()) {
-      data = {
+    const projectData = await Project.findByIdAndUpdate(
+      id,
+      {
         title: req.body.title,
         eod: req.body.eod,
         desc: req.body.desc,
@@ -98,18 +130,8 @@ const updateProject = async (req, res) => {
         team: req.body.team,
         createdBy: req.body.createdBy,
         isTrashed: req.body.isTrashed,
-      };
-    } else {
-      res.status(400).json({
-        status: false,
-        message: "You are not authorised to perform this action",
-      });
-    }
-
-    const projectData = await Project.findByIdAndUpdate(
-      id,
-      ...data,
-      { stage: req.body.stage },
+        stage: req.body.stage,
+      },
       { new: true, runValidators: true }
     );
 
@@ -132,22 +154,22 @@ const updateProject = async (req, res) => {
 const trashProject = async (req, res) => {
   try {
     const { id } = req.params;
-    const userId = req.user._id;
     const project = await Project.findById(id);
 
-    if (project.createdBy.toString() !== userId.toString()) {
-      project.isTrashed = true;
-    } else {
-      res.status(400).json({
-        status: false,
-        message: "You are not authorised to perform this action",
-      });
+    if (!project) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Project not found" });
     }
 
+    project.isTrashed = true;
     await project.save();
+
+    await Task.updateMany({ project: id }, { $set: { taskIsTrashed: true } });
+
     res.status(200).json({
       status: true,
-      message: "Project trashed Successfully",
+      message: "Project and its tasks trashed successfully",
       project,
     });
   } catch (error) {

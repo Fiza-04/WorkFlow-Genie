@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import TaskCount from "./TaskCount";
 import { useLocation } from "react-router-dom";
-import TaskCard from "./Taskcard"; // Ensure the import is correct
+import TaskCard from "./Taskcard";
 import AddTaskButton from "./AddTaskButton";
 
 const TasksPage = () => {
@@ -21,7 +21,6 @@ const TasksPage = () => {
       }
 
       const result = await response.json();
-      console.log(result);
       setTaskData(result.tasks || []);
     } catch (error) {
       console.log(error);
@@ -29,13 +28,13 @@ const TasksPage = () => {
     }
   };
 
-  const handleTaskAdded = () => {
+  const handleTask = () => {
     getTaskData();
   };
 
   useEffect(() => {
     if (!hasFetchedData.current) {
-      getTaskData();
+      handleTask();
       hasFetchedData.current = true;
     }
   }, []);
@@ -55,11 +54,18 @@ const TasksPage = () => {
             <p className="text-start">Assigned To</p>
             <p className="text-start">Status</p>
             <p className="text-start">
-              <AddTaskButton project={project} onTaskAdded={handleTaskAdded} />
+              <AddTaskButton project={project} onTaskAdded={handleTask} />
             </p>
           </div>
           {taskData.length > 0 ? (
-            taskData.map((task) => <TaskCard key={task._id} task={task} />)
+            taskData.map((task) => (
+              <TaskCard
+                key={task._id}
+                project={project}
+                task={task}
+                loadData={handleTask}
+              />
+            ))
           ) : (
             <div className="flex flex-col p-40 font-light text-neutral-600">
               <p className="text-3xl pb-3">Hey! user1</p>

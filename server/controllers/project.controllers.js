@@ -110,16 +110,6 @@ const updateProject = async (req, res) => {
   try {
     const { id } = req.params;
 
-    data = {
-      title: req.body.title,
-      eod: req.body.eod,
-      desc: req.body.desc,
-      priority: req.body.priority,
-      team: req.body.team,
-      createdBy: req.body.createdBy,
-      isTrashed: req.body.isTrashed,
-    };
-
     const projectData = await Project.findByIdAndUpdate(
       id,
       {

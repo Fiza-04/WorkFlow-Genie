@@ -29,7 +29,6 @@ const AddEditForms = ({ onClick, flag = "add", existingProject }) => {
     if (!hasFetchedData.current) {
       fetchData();
       if (flag === "edit" && existingProject) {
-        console.log(existingProject);
         setTitle(existingProject.title);
         setEndDate(dateFormat(existingProject.eod).otherformattedDate);
         setDesc(existingProject.desc);

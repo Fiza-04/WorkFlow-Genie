@@ -6,4 +6,3 @@ export { default as Projects } from "./Projects.tsx";
 export { default as ProjectDashboard } from "./ProjectDashboard.tsx";
 export { default as Profile } from "./Profile.tsx";
 export { default as Trash } from "./Trash.tsx";
-export { default as Settings } from "./Settings.tsx";

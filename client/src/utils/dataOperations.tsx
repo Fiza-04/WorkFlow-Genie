@@ -46,8 +46,9 @@ export async function authControll(navigate, flag = false) {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        const userId = await response.json();
-        return { ...user, userId };
+        const userData = await response.json();
+        const userId = userData._id;
+        return { ...user, userData, userId };
       } catch (error) {
         console.error("Failed to fetch user ID:", error);
         Cookies.remove("token");

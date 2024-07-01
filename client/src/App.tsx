@@ -6,9 +6,7 @@ import {
   Dashboard,
   Projects,
   ProjectDashboard,
-  Profile,
   Trash,
-  Settings,
 } from "./pages/index.tsx";
 import { Sidebar, Topbar } from "./components/index.tsx";
 
@@ -38,8 +36,6 @@ const App: React.FC = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/project-dashboard" element={<ProjectDashboard />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/settings" element={<Settings />} />
         <Route path="/dump" element={<Trash />} />
       </Route>
     </Routes>

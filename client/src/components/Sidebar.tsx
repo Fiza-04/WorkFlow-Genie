@@ -6,27 +6,22 @@ import {
   faListCheck,
   faChartSimple,
   faUser,
-  // faLayerGroup,
-  // faUserGroup,
   faTrash,
-  faGear,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import Profile from "../pages/Profile"; // Adjust the import if the path is different
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(true);
-  // const [active, setActive] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
   const MenuItems = [
-    { title: "Profile", src: faUser, route: "/profile" },
-    // { title: "Team", src: faUserGroup, route: "" },
+    { title: "Profile", src: faUser, func: () => setShowProfile(true) },
     { title: "Dashboard", src: faChartSimple, route: "/dashboard" },
-    // { title: "Categories", src: faLayerGroup, route: "" },
     { title: "Projects", src: faListCheck, route: "/projects" },
     { title: "Trash", src: faTrash, route: "/dump" },
-    { title: "Settings", src: faGear, gap: true, route: "/settings" },
     {
       title: "Logout",
       src: faRightFromBracket,
@@ -43,9 +38,7 @@ const Sidebar = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log("response => ", response);
       const data = await response.json();
-      console.log("data => ", data);
 
       if (data.status === "ok") {
         Cookies.remove("token");
@@ -92,8 +85,8 @@ const Sidebar = () => {
             <li
               key={index}
               className={`text-white text-md font-light flex items-center gap-x-4 cursor-pointer p-3 m-2 hover:bg-neutral-900 hover-shadow rounded-md ${
-                menu.gap && "mt-52"
-              } ${!open && "mr-6"}`}
+                !open && "mr-6"
+              }`}
               onClick={() => {
                 if (menu.func) {
                   menu.func();
@@ -113,6 +106,7 @@ const Sidebar = () => {
           ))}
         </ul>
       </div>
+      {showProfile ? <Profile onClose={() => setShowProfile(false)} /> : ""}
     </div>
   );
 };

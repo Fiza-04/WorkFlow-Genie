@@ -81,7 +81,36 @@ const loginUser = async (req, res) => {
   }
 };
 
-getCurrentUser = async (req, res) => {
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const userData = await User.findByIdAndUpdate(
+      id,
+      {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        username: req.body.username,
+        email: req.body.email,
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!userData) {
+      return res.status(404).json({ status: false, message: "User not found" });
+    }
+
+    res.status(200).json({
+      status: true,
+      message: "User updated Successfully",
+      userData,
+    });
+  } catch (error) {
+    res.status(400).json({ status: false, message: error.message });
+  }
+};
+
+const getCurrentUser = async (req, res) => {
   try {
     const { email } = req.params;
     const user = await User.findOne({ email });
@@ -90,7 +119,7 @@ getCurrentUser = async (req, res) => {
       return { status: "error", error: "No such User Found!" };
     }
 
-    res.status(200).json(user._id);
+    res.status(200).json(user);
   } catch (error) {
     res.status(404).json({ message: "User cannot be found", error });
   }
@@ -130,6 +159,7 @@ const logoutUser = async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
+  updateUser,
   getUsers,
   getUser,
   getCurrentUser,

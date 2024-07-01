@@ -40,16 +40,10 @@ const Landing = () => {
             </a>
           </div>
           <div className="flex space-x-12 mt-6 mr-10">
-            <a
-              className="basic_btn1 text-white"
-              onClick={() => setShowForm("login")}
-            >
+            <a className="basic_btn2" onClick={() => setShowForm("login")}>
               Login
             </a>
-            <a
-              className="basic_btn2 text-white"
-              onClick={() => setShowForm("signup")}
-            >
+            <a className="basic_btn2" onClick={() => setShowForm("signup")}>
               Sign Up
             </a>
           </div>

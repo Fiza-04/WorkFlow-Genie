@@ -42,12 +42,8 @@
     @apply text-white ml-2 flex justify-center items-center font-semibold tracking-widest text-2xl;
   }
 
-  .basic_btn1 {
-    @apply border-2 border-violet-500 h-12 w-28 rounded-full flex justify-center items-center hover:bg-violet-500;
-  }
-
   .basic_btn2 {
-    @apply bg-violet-500 h-12 w-28 rounded-full flex justify-center items-center hover:border-2 hover:border-violet-500 hover:bg-black;
+    @apply bg-violet-500 h-12 w-28 rounded-full flex justify-center items-center text-white auth-button-shadow hover:bg-violet-600 cursor-pointer;
   }
 
   .get_started {
@@ -196,6 +192,10 @@
   left: calc(100% - 105px);
   box-shadow: 0 0 10px rgba(143, 141, 222, 0.7);
   transition: 2s ease-in-out;
+}
+
+.auth-button-shadow {
+  box-shadow: inset 7px 7px 10px #6b47bd, inset -7px -7px 7px #ab71ff;
 }
 
 .right-shadow {

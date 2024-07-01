@@ -23,7 +23,6 @@ const TasksPage = () => {
       const result = await response.json();
       setTaskData(result.tasks || []);
     } catch (error) {
-      console.log(error);
       setTaskData([]);
     }
   };

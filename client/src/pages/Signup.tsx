@@ -8,11 +8,29 @@ const Signup = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const navigate = useNavigate();
+
+  const validatePassword = (password) => {
+    return password.length >= 6;
+  };
 
   async function registerUser(event: React.FormEvent) {
     event.preventDefault();
+
+    let valid = true;
+
+    if (!validatePassword(password)) {
+      setPasswordError("Password must be at least 6 characters long.");
+      valid = false;
+    } else {
+      setPasswordError("");
+    }
+
+    if (!valid) {
+      return;
+    }
+
     const response = await fetch("http://localhost:3000/api/register", {
       method: "POST",
       headers: {
@@ -32,7 +50,7 @@ const Signup = () => {
     if (data.user && data.status === "ok") {
       Cookies.set("token", data.user, { expires: 1 });
       alert("Signup Successful");
-      navigate("/dashboard");
+      navigate("/projects");
     } else {
       alert("Incorrect Email or Password!");
     }
@@ -42,7 +60,7 @@ const Signup = () => {
     const token = Cookies.get("token");
 
     if (token) {
-      navigate("/dashboard");
+      navigate("/projects");
     }
   }, [navigate]);
 
@@ -57,47 +75,47 @@ const Signup = () => {
           onChange={(e) => setFirstName(e.target.value)}
           type="text"
           placeholder="First Name"
-          className="input-style-1"
+          className="input-style-1 mb-3"
+          required
         />
         <input
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
           type="text"
           placeholder="Last Name"
-          className="input-style-1"
+          className="input-style-1 mb-3"
         />
         <input
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           type="text"
           placeholder="Username"
-          className="input-style-1"
+          className="input-style-1 mb-3"
+          required
         />
         <input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           type="email"
           placeholder="Email"
-          className="input-style-1"
+          className="input-style-1 mb-3"
+          required
         />
         <input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           type="password"
           placeholder="Password"
-          className="input-style-1"
+          className="input-style-1 mb-3"
+          required
         />
-        <input
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          type="password"
-          placeholder="Confirm Password"
-          className="input-style-1"
-        />
+        {passwordError && (
+          <p className="text-red-500 text-sm mb-4">{passwordError}</p>
+        )}
         <input
           type="submit"
           value="Sign Up"
-          className="rounded-[5px] p-1 hover:bg-neutral-900"
+          className="rounded-[5px] p-1 hover:bg-neutral-900 mt-3"
         />
       </form>
     </div>

@@ -25,7 +25,7 @@ const Landing = () => {
     const token = Cookies.get("token");
 
     if (token) {
-      navigate("/dashboard");
+      navigate("/projects");
     }
   }, [navigate]);
 

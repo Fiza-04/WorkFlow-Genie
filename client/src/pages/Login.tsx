@@ -5,10 +5,41 @@ import Cookies from "js-cookie";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const navigate = useNavigate();
 
-  async function loginUser(event: React.FormEvent) {
+  const validateEmail = (email) => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
+
+  const validatePassword = (password) => {
+    return password.length >= 6;
+  };
+
+  async function loginUser(event) {
     event.preventDefault();
+
+    let valid = true;
+
+    if (!validateEmail(email)) {
+      setEmailError("Please enter a valid email address.");
+      valid = false;
+    } else {
+      setEmailError("");
+    }
+
+    if (!validatePassword(password)) {
+      setPasswordError("Password must be at least 6 characters long.");
+      valid = false;
+    } else {
+      setPasswordError("");
+    }
+
+    if (!valid) {
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:3000/api/login", {
@@ -27,7 +58,7 @@ const Login = () => {
       if (data.user && data.status === "ok") {
         Cookies.set("token", data.user, { expires: 1 });
         alert("Login Successful");
-        navigate("/dashboard");
+        navigate("/projects");
       } else {
         alert("Incorrect Email or Password!");
       }
@@ -41,7 +72,7 @@ const Login = () => {
     const token = Cookies.get("token");
 
     if (token) {
-      navigate("/dashboard");
+      navigate("/projects");
     }
   }, [navigate]);
 
@@ -56,19 +87,25 @@ const Login = () => {
           onChange={(e) => setEmail(e.target.value)}
           type="email"
           placeholder="Email"
-          className="input-style-1"
+          className="input-style-1 mb-4"
         />
+        {emailError && (
+          <p className="text-red-500 text-sm mb-4">{emailError}</p>
+        )}
         <input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           type="password"
           placeholder="Password"
-          className="input-style-1"
+          className="input-style-1 mb-4"
         />
+        {passwordError && (
+          <p className="text-red-500 text-sm mb-4">{passwordError}</p>
+        )}
         <input
           type="submit"
           value="Log In"
-          className="rounded-[5px] p-1 hover:bg-neutral-900 cursor-pointer"
+          className="rounded-[5px] p-1 hover:bg-neutral-900 cursor-pointer mt-3"
         />
       </form>
     </div>

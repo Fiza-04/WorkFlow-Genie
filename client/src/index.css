@@ -62,15 +62,11 @@
     @apply cursor-pointer bg-neutral-900 p-4 rounded-[17px] hover:bg-neutral-800 icon-shadow;
   }
 
-  .dashboard_box {
-    @apply flex flex-col items-start p-5 bg-neutral-800 icon-shadow rounded-[30px] w-[25%] h-72;
-  }
-
   .input-style {
-    @apply bg-neutral-900 border rounded-[10px] h-11 p-2;
+    @apply bg-neutral-800 border rounded-[10px] h-11 p-2;
   }
   .input-style-1 {
-    @apply bg-black border rounded-[10px] h-11 p-2 mb-4;
+    @apply bg-black border rounded-[10px] h-11 p-2;
   }
 }
 
@@ -272,7 +268,7 @@
 }
 
 .scrollable-div {
-  height: calc(90vh - 4rem);
+  height: calc(94vh - 4rem);
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;

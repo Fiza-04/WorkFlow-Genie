@@ -12,7 +12,7 @@ const TextArea = ({ value, onChange }) => {
         value={value}
         onChange={onChange}
         rows="4"
-        className="block p-2.5 w-full text-sm bg-neutral-900 border rounded-[15px]"
+        className="block p-2.5 w-full text-sm bg-neutral-800 border rounded-[15px]"
         placeholder="Description . . ."
       ></textarea>
     </div>

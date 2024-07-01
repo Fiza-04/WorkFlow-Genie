@@ -4,13 +4,12 @@ import { useNavigate } from "react-router-dom";
 import {
   faAngleLeft,
   faListCheck,
-  faChartSimple,
   faUser,
   faTrash,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import Profile from "../pages/Profile"; // Adjust the import if the path is different
+import Profile from "../pages/Profile";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -19,7 +18,6 @@ const Sidebar = () => {
 
   const MenuItems = [
     { title: "Profile", src: faUser, func: () => setShowProfile(true) },
-    { title: "Dashboard", src: faChartSimple, route: "/dashboard" },
     { title: "Projects", src: faListCheck, route: "/projects" },
     { title: "Trash", src: faTrash, route: "/dump" },
     {

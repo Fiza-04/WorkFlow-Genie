@@ -171,47 +171,53 @@ const Trash = () => {
           </div>
         </div>
         <div className="flex flex-row flex-wrap space-between">
-          {projectData.map((project) => (
-            <div
-              key={project._id}
-              className="w-[30%] h-[120px] icon-shadow rounded-[12px] mr-5 mb-3"
-            >
-              <div className="flex flex-row justify-between p-4">
-                <div>
-                  <p className="text-[16px] font-light text-neutral-400 w-52  overflow-hidden whitespace-nowrap overflow-ellipsis ">
-                    {project.title}
-                  </p>
-                  <p
-                    className={`flex justify-center mt-1 text-[12px] text-neutral-200 font-normal w-24 rounded-full ${priority(
-                      project.priority,
-                      project.stage
-                    )}`}
-                  >
-                    {project.stage}
+          {projectData.length > 0 ? (
+            projectData.map((project) => (
+              <div
+                key={project._id}
+                className="w-[30%] h-[120px] icon-shadow rounded-[12px] mr-5 mb-3"
+              >
+                <div className="flex flex-row justify-between p-4">
+                  <div>
+                    <p className="text-[16px] font-light text-neutral-400 w-52  overflow-hidden whitespace-nowrap overflow-ellipsis ">
+                      {project.title}
+                    </p>
+                    <p
+                      className={`flex justify-center mt-1 text-[12px] text-neutral-200 font-normal w-24 rounded-full ${priority(
+                        project.priority,
+                        project.stage
+                      )}`}
+                    >
+                      {project.stage}
+                    </p>
+                  </div>
+                  <p className="text-neutral-300 text-[12px] space-x-2">
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      className="bg-neutral-900 p-2 rounded-full hover:bg-neutral-950 hover:text-neutral-50 cursor-pointer"
+                      onClick={() => handleDeleteProject(project._id)}
+                    />
+                    <FontAwesomeIcon
+                      icon={faRotate}
+                      className="bg-neutral-900 p-2 rounded-full hover:bg-neutral-950 hover:text-neutral-50 cursor-pointer"
+                      onClick={() => handleRestoreProject(project._id)}
+                    />
                   </p>
                 </div>
-                <p className="text-neutral-300 text-[12px] space-x-2">
-                  <FontAwesomeIcon
-                    icon={faTrash}
-                    className="bg-neutral-900 p-2 rounded-full hover:bg-neutral-950 hover:text-neutral-50 cursor-pointer"
-                    onClick={() => handleDeleteProject(project._id)}
-                  />
-                  <FontAwesomeIcon
-                    icon={faRotate}
-                    className="bg-neutral-900 p-2 rounded-full hover:bg-neutral-950 hover:text-neutral-50 cursor-pointer"
-                    onClick={() => handleRestoreProject(project._id)}
-                  />
-                </p>
+                <div className="text-neutral-200 font-thin text-[14px] mr-5 ml-5 w-72 overflow-hidden whitespace-nowrap overflow-ellipsis">
+                  {project.desc !== "" ? (
+                    <p>{project.desc}</p>
+                  ) : (
+                    "No description :("
+                  )}
+                </div>
               </div>
-              <div className="text-neutral-200 font-thin text-[14px] mr-5 ml-5 w-72 overflow-hidden whitespace-nowrap overflow-ellipsis">
-                {project.desc !== "" ? (
-                  <p>{project.desc}</p>
-                ) : (
-                  "No description :("
-                )}
-              </div>
+            ))
+          ) : (
+            <div className="text-neutral-500 text-[20px] flex flex-col items-center font-thin w-full">
+              <p>Hey! No trashed projects.</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>

@@ -89,15 +89,15 @@ const ProjectOverview = () => {
               <p className="font-light text-neutral-300 text-center mb-2">
                 Remaining Days
               </p>
-              <div className="bg-red-200 red_shadow w-14 h-14 flex items-center justify-center rounded-full">
-                <p className="text-[25px] font-bold text-neutral-800 text-center">
+              <div className="bg-red-500 red_shadow_2 w-14 h-14 flex items-center justify-center rounded-full">
+                <p className="text-[25px] font-semibold text-neutral-900 text-center">
                   {dateFormat(project.eod).remainingDays}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className=" mt-7 h-40 flex-wrap scrollable-div-3">
+          <div className=" mt-7 h-40 flex-wrap scrollable-div-3 icon-shadow p-3 pl-5 rounded-[15px]">
             <p className="text-xl text-neutral-500 mb-4">Team Members</p>
             <div className="grid grid-cols-3 gap-7 mt-0 text-neutral-300 font-light h-24">
               {project.team && project.team.length > 0 ? (
@@ -130,23 +130,8 @@ const ProjectOverview = () => {
         </div>
       </div>
       <div className="flex flex-row">
-        <div className="rounded-[20px] ml-[-2%] w-[48%] mt-7 h-40">
+        <div className="rounded-[20px] w-[48%] mt-7 h-40 icon-shadow pt-6">
           <TaskCount flag="overview" project={project._id} />
-        </div>
-        <div className="icon-shadow rounded-[20px] mt-0 ml-9 w-[52%] h-64  flex justify-center items-center">
-          {project.tasks.length > 0 ? (
-            <div>tasks found</div>
-          ) : (
-            <div className="flex justify-center items-center">
-              <img src="/assets/images/no_tasks_3.png" width={130} />
-              <div className="flex flex-col">
-                <p className="font-semibold text-xl text-neutral-500">
-                  No Tasks Found!!
-                </p>
-                {/* <AddTaskButton project={project} /> */}
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>

@@ -1,13 +1,7 @@
 import React from "react";
 import Cookies from "js-cookie";
 import { Routes, Route, useLocation, Navigate, Outlet } from "react-router-dom";
-import {
-  Landing,
-  Dashboard,
-  Projects,
-  ProjectDashboard,
-  Trash,
-} from "./pages/index.tsx";
+import { Landing, Projects, ProjectDashboard, Trash } from "./pages/index.tsx";
 import { Sidebar, Topbar } from "./components/index.tsx";
 
 const App: React.FC = () => {
@@ -33,7 +27,6 @@ const App: React.FC = () => {
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route element={<Layout />}>
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/project-dashboard" element={<ProjectDashboard />} />
         <Route path="/dump" element={<Trash />} />

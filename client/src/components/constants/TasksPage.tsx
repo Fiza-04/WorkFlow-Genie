@@ -69,7 +69,7 @@ const TasksPage = () => {
             ))
           ) : (
             <div className="flex flex-col p-40 font-light text-neutral-600">
-              <p className="text-3xl pb-3">Hey! user1</p>
+              <p className="text-3xl pb-3">Hey!</p>
               <p className="text-xl pb-3">
                 Looks like you don't have any Tasks yet!!
               </p>
